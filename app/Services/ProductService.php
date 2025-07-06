@@ -54,6 +54,11 @@ class ProductService
         return $product;
     }
 
+    public function delete($ids)
+    {
+        Product::destroy($ids);
+    }
+
     public function validStatuses()
     {
         return Status::whereIn('code', ['active', 'inactive'])

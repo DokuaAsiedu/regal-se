@@ -3,6 +3,8 @@
 namespace App\Livewire\Tables\Products;
 
 use App\Models\Product;
+use App\Services\ProductService;
+use App\Traits\HandlesErrorMessage;
 use Flux\Flux;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,11 +17,18 @@ use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
+use Throwable;
 
 final class ProductTable extends PowerGridComponent
 {
+    use HandlesErrorMessage;
+
     public string $tableName = 'product-table-myz085-table';
     public bool $deferLoading = true;
+
+    protected $listeners = ['refresh' => '$refresh'];
+
+    protected $productService;
 
     public function setUp(): array
     {
@@ -33,6 +42,11 @@ final class ProductTable extends PowerGridComponent
                 ->showPerPage()
                 ->showRecordCount(),
         ];
+    }
+
+    public function boot(ProductService $productService)
+    {
+        $this->productService = $productService;
     }
 
     public function datasource(): Builder
@@ -102,6 +116,14 @@ final class ProductTable extends PowerGridComponent
     {
         return [
         ];
+    }
+
+    public function showDeleteModal($id): void
+    {
+        $this->dispatch('openModal', component: 'components.delete-confirmation-modal', arguments: [ 
+            'ids' =>  [$id],
+            'class' => ProductService::class,
+        ]);
     }
 
     public function actionsFromView($row): View
