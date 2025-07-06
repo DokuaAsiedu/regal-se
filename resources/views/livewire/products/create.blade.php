@@ -1,4 +1,4 @@
-<div>
+<div class="flex flex-col gap-5">
     <flux:heading level="1" size="xl">{{ $header }}</flux:heading>
 
     <form wire:submit="save" class="grid lg:grid-cols-2 gap-6">
@@ -49,6 +49,6 @@
             <flux:error name="status" />
         </div>
 
-        <flux:button type="submit" class="lg:col-span-2">Save</flux:button>
+        <x-button :name="__('Save')" type="submit" class="lg:col-span-2" />
     </form>
 </div>

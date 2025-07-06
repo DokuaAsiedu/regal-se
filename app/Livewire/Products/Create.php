@@ -78,7 +78,7 @@ class Create extends Component
             $this->header = __('Edit Product');
             $this->success_message = __('Product successfully updated');
         } else {
-            $this->header = __('Add New Product');
+            $this->header = __('Create New Product');
             $this->success_message = __('Product successfully created');
         }
     }

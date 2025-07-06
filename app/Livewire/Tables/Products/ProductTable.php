@@ -37,7 +37,7 @@ final class ProductTable extends PowerGridComponent
         return [
             PowerGrid::header()
                 ->showSearchInput()
-                ->includeViewOnTop('products.actions.index'),
+                ->includeViewOnTop('products.table.header.actions'),
             PowerGrid::footer()
                 ->showPerPage()
                 ->showRecordCount(),
@@ -128,6 +128,6 @@ final class ProductTable extends PowerGridComponent
 
     public function actionsFromView($row): View
     {
-        return view('products.columns.actions', ['row' => $row]);
+        return view('products.table.columns.actions', ['row' => $row]);
     }
 }
