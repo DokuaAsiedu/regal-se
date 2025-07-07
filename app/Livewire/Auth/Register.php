@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Auth;
 
+use App\Models\Status;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
@@ -34,7 +35,10 @@ class Register extends Component
 
         $validated['password'] = Hash::make($validated['password']);
 
-        event(new Registered(($user = User::create($validated))));
+        $status_id = Status::where('code', 'active')->first()->id ?? null;
+        $input = array_merge($validated, ['status_id' => $status_id]);
+
+        event(new Registered(($user = User::create($input))));
 
         Auth::login($user);
 

@@ -1,6 +1,7 @@
 <div>
     @php
-        $color = match ($status->code) {
+        $code = $status->code ?? null;
+        $color = match ($code) {
             'active' => 'lime',
             'inactive' => 'red',
             'pending' => 'sky',
@@ -10,7 +11,7 @@
             'suspended' => 'zinc',
             default => 'teal'
         };
-        $badge = match ($status->code) {
+        $badge = match ($code) {
             'active' => 'pill',
             'inactive' => 'pill',
             'pending' => 'solid',
