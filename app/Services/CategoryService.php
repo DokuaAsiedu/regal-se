@@ -5,25 +5,28 @@ namespace App\Services;
 use App\Exceptions\CustomException;
 use App\Models\Category;
 use App\Models\Status;
+use App\Repositories\CategoryRepository;
 
 class CategoryService
 {
+    protected $categoryRepository;
+
     /**
      * Create a new class instance.
      */
-    public function __construct()
+    public function __construct(CategoryRepository $categoryRepository)
     {
-        //
+        $this->categoryRepository = $categoryRepository;
     }
 
     public function find($id)
     {
-        return Category::findOrFail($id);
+        return $this->categoryRepository->find($id);
     }
 
     public function products()
     {
-        return Category::query();
+        return $this->categoryRepository->allQuery();
     }
 
     public function store($input)
@@ -36,7 +39,7 @@ class CategoryService
 
         $this->checkIfNameExists($input['name']);
 
-        return Category::create($input);
+        return $this->categoryRepository->create($input);
     }
 
     public function update($id, $input)
@@ -48,10 +51,8 @@ class CategoryService
         }
 
         $this->checkIfNameExists($input['name'], $id);
-        $product = $this->find($id);
-        $product->update($input);
 
-        return $product;
+        return $this->categoryRepository->update($input, $id);
     }
 
     public function delete($ids)

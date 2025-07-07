@@ -5,25 +5,28 @@ namespace App\Services;
 use App\Exceptions\CustomException;
 use App\Models\Product;
 use App\Models\Status;
+use App\Repositories\ProductRepository;
 
 class ProductService
 {
+    protected $productRepository;
+
     /**
      * Create a new class instance.
      */
-    public function __construct()
+    public function __construct(ProductRepository $productRepository)
     {
-        //
+        $this->productRepository = $productRepository;
     }
 
     public function find($id)
     {
-        return Product::findOrFail($id);
+        return $this->productRepository->find($id);
     }
 
     public function products()
     {
-        return Product::query();
+        return $this->productRepository->allQuery();
     }
 
     public function store($input)
@@ -36,7 +39,7 @@ class ProductService
 
         $this->checkIfNameExists($input['name']);
 
-        return Product::create($input);
+        return $this->productRepository->create($input);
     }
 
     public function update($id, $input)
@@ -48,15 +51,13 @@ class ProductService
         }
 
         $this->checkIfNameExists($input['name'], $id);
-        $product = $this->find($id);
-        $product->update($input);
 
-        return $product;
+        return $this->productRepository->update($input, $id);
     }
 
     public function delete($ids)
     {
-        Product::destroy($ids);
+        $this->productRepository->delete($ids);
     }
 
     public function validStatuses()
