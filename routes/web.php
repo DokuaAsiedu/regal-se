@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
@@ -16,6 +17,7 @@ Route::view('dashboard', 'dashboard')
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('products', ProductController::class);
+    Route::resource('categories', CategoryController::class);
     Route::redirect('settings', 'settings/profile');
 
     Route::get('settings/profile', Profile::class)->name('settings.profile');
