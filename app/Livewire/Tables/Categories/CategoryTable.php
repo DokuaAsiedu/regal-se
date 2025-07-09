@@ -7,6 +7,7 @@ use App\Services\CategoryService;
 use App\Traits\HandlesErrorMessage;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\View\View;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
@@ -62,7 +63,7 @@ final class CategoryTable extends PowerGridComponent
             ->add('name')
             ->add('description')
             ->add('status_name', function ($row) {
-                return $row->status->name ?? 'N/A';
+                return Blade::render('components.status', ['status' => $row->status]);
             })
             ->add('created_at');
     }

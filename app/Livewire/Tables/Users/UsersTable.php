@@ -71,7 +71,7 @@ final class UsersTable extends PowerGridComponent
             })
             ->add('email')
             ->add('status_name', function ($row) {
-                return Blade::render('status', ['status' => $row->status]);
+                return Blade::render('components.status', ['status' => $row->status]);
             })
             ->add('created_at');
     }

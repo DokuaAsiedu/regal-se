@@ -70,7 +70,7 @@ final class ProductTable extends PowerGridComponent
             ->add('quantity')
             ->add('description')
             ->add('status_name', function ($row) {
-                return Blade::render('status', ['status' => $row->status]);
+                return Blade::render('components.status', ['status' => $row->status]);
             })
             ->add('created_at');
     }
