@@ -1,4 +1,4 @@
-<x-layouts.app :title="__('Create New Product')">
+<x-layouts.admin :title="__('Create New Product')">
     <livewire:products.create />
-</x-layouts.app>
+</x-layouts.admin>
 <!-- No surplus words or unnecessary actions. - Marcus Aurelius -->

@@ -1,4 +1,4 @@
-<x-layouts.app :title="__('Edit Category')">
+<x-layouts.admin :title="__('Edit Category')">
     <livewire:categories.create :id="$id" />
-</x-layouts.app>
+</x-layouts.admin>
 <!-- Because you are alive, everything is possible. - Thich Nhat Hanh -->

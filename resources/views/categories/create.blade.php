@@ -1,4 +1,4 @@
-<x-layouts.app :title="__('Create New Category')">
+<x-layouts.admin :title="__('Create New Category')">
     <livewire:categories.create />
-</x-layouts.app>
+</x-layouts.admin>
 <!-- An unexamined life is not worth living. - Socrates -->

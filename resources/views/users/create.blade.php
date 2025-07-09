@@ -1,4 +1,4 @@
-<x-layouts.app :title="__('Create New User')">
+<x-layouts.admin :title="__('Create New User')">
     <livewire:users.create />
-</x-layouts.app>
+</x-layouts.admin>
 <!-- We must ship. - Taylor Otwell -->
