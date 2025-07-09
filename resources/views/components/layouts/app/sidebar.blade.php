@@ -8,7 +8,7 @@
     <flux:navlist variant="outline">
         <flux:navlist.group :heading="__('Platform')" class="grid">
             <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-            <flux:navlist.group :heading="__('Store')" icon="wrench-screwdriver" expandable :expanded="in_array(Route::currentRouteName(), ['products.index', 'categories.index'])">
+            <flux:navlist.group :heading="__('Store')" icon="wrench-screwdriver" expandable :expanded="Route::is('products*', 'categories*')">
                 <flux:navlist.item icon="cube" :href="route('products.index')" :current="request()->routeIs('products.index')" wire:navigate>{{ __('Products') }}</flux:navlist.item>
                 <flux:navlist.item icon="rectangle-group" :href="route('categories.index')" :current="request()->routeIs('categories.index')" wire:navigate>Categories</flux:navlist.item>
             </flux:navlist.group>
