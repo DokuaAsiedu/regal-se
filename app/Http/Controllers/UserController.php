@@ -20,4 +20,19 @@ class UserController extends Controller
     {
         return view('users.edit', compact('id'));
     }
+
+    public function editProfile()
+    {
+        return view('users.profile-edit');
+    }
+
+    public function changePassword()
+    {
+        return view('users.password-edit');
+    }
+
+    public function changeAppearance()
+    {
+        return view('users.appearance-edit');
+    }
 }
