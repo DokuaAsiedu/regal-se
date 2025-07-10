@@ -10,7 +10,8 @@
             <flux:navlist.item icon="home" :href="route('admin.dashboard')" :current="request()->routeIs('admin.dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
             <flux:navlist.group :heading="__('Store')" icon="wrench-screwdriver" expandable :expanded="Route::is('products*', 'categories*')">
                 <flux:navlist.item icon="cube" :href="route('products.index')" :current="request()->routeIs('products.index')" wire:navigate>{{ __('Products') }}</flux:navlist.item>
-                <flux:navlist.item icon="rectangle-group" :href="route('categories.index')" :current="request()->routeIs('categories.index')" wire:navigate>Categories</flux:navlist.item>
+                <flux:navlist.item icon="rectangle-group" :href="route('categories.index')" :current="request()->routeIs('categories.index')" wire:navigate>{{ __('Categories') }}</flux:navlist.item>
+                <flux:navlist.item icon="cog" :href="route('store-settings.edit')" :current="request()->routeIs('store-settings.edit')" wire:navigate>{{ ('Store Settings') }}</flux:navlist.item>
             </flux:navlist.group>
             <flux:navlist.item icon="users" :href="route('users.index')" :current="request()->routeIs('users.index')" wire:navigate>{{ __('Users') }}</flux:navlist.item>
         </flux:navlist.group>
