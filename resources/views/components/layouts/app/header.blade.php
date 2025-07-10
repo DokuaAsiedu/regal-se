@@ -52,6 +52,11 @@
                 </form>
             </flux:menu>
         </flux:dropdown>
+        @if (auth()->user()->is_admin)
+            <div class="max-sm:hidden">
+                <flux:button :href="route('admin.dashboard')">{{ __('Admin Dashboard') }}</flux:button>
+            </div>
+        @endif
     @else
         <div class="flex gap-3 max-sm:hidden">
             <flux:button :href="route('login')">{{ __('Login') }}</flux:button>
@@ -72,13 +77,21 @@
     <flux:spacer />
 
     <flux:navlist variant="outline">
-        <flux:navlist.item :href="route('login')">
-            {{ __('Login') }}
-        </flux:navlist.item>
+        @if (auth()->check())
+            @if (auth()->user()->is_admin)
+                <flux:navlist.item :href="route('admin.dashboard')">
+                    {{ __('Admin Dashboard') }}
+                </flux:navlist.item>
+            @endif
+        @else
+            <flux:navlist.item :href="route('login')">
+                {{ __('Login') }}
+            </flux:navlist.item>
 
-        <flux:navlist.item :href="route('register')">
-            {{ __('Register') }}
-        </flux:navlist.item>
+            <flux:navlist.item :href="route('register')">
+                {{ __('Register') }}
+            </flux:navlist.item>
+        @endif
     </flux:navlist>
 </flux:sidebar>
 

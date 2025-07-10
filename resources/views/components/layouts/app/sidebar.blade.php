@@ -19,12 +19,11 @@
     <flux:spacer />
 
     <flux:navlist variant="outline">
-        <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
-        {{ __('Repository') }}
-        </flux:navlist.item>
-
-        <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
-        {{ __('Documentation') }}
+        <flux:navlist.item :href="route('home')" class="py-6">
+            <div class="flex items-center gap-2">
+                <flux:icon.arrow-right-start-on-rectangle icon:size="24" />
+                {{ __('Client') }}
+            </div>
         </flux:navlist.item>
     </flux:navlist>
 
