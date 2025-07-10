@@ -11,7 +11,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::view('dashboard', 'admin.dashboard')
     ->middleware(['auth', 'verified', 'admin'])
-    ->name('dashboard')
+    ->name('admin.dashboard')
     ->prefix('admin');
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
