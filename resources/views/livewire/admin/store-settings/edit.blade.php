@@ -26,6 +26,12 @@
             <flux:error name="repayment_months" />
         </div>
 
+        <div class="flex flex-col gap-2">
+            <label for="down_payment_percentage">{{ __('Down Payment Percentage') }} <x-required /></label>
+            <flux:input type="number" id="down_payment_percentage" wire:model="down_payment_percentage" step="0.1" />
+            <flux:error name="down_payment_percentage" />
+        </div>
+
         <x-button :name="__('Save')" type="submit" class="lg:col-span-2" />
     </form>
 </div>

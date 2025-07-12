@@ -16,6 +16,7 @@ class Edit extends Component
     public $currency_name;
     public $currency_symbol;
     public $repayment_months;
+    public $down_payment_percentage;
 
     protected $storeSettingsService;
 
@@ -24,6 +25,7 @@ class Edit extends Component
         'currency_name' => 'required|string|min:1',
         'currency_symbol' => 'required|string|min:1',
         'repayment_months' => 'required|integer|min:1',
+        'down_payment_percentage' => 'required|numeric|min:1|max:99',
     ];
 
     public function boot(StoreSettingsService $storeSettingsService)
@@ -59,6 +61,10 @@ class Edit extends Component
             ->allQuery(['code' => 'repayment_months'])
             ->first()
             ->value;
+        $this->down_payment_percentage = $this->storeSettingsService
+            ->allQuery(['code' => 'down_payment_percentage'])
+            ->first()
+            ->value;
     }
 
     public function save()
@@ -71,6 +77,7 @@ class Edit extends Component
                 'currency_name' => $this->currency_name,
                 'currency_symbol' => $this->currency_symbol,
                 'repayment_months' => $this->repayment_months,
+                'down_payment_percentage' => $this->down_payment_percentage,
             ];
             foreach ($updates as $code => $value) {
                 $this->storeSettingsService
