@@ -52,11 +52,11 @@
                 </form>
             </flux:menu>
         </flux:dropdown>
-        @if (auth()->user()->is_admin)
+        @role('admin')
             <div class="max-sm:hidden">
                 <flux:button :href="route('admin.dashboard')">{{ __('Admin Dashboard') }}</flux:button>
             </div>
-        @endif
+        @endrole
     @else
         <div class="flex gap-3 max-sm:hidden">
             <flux:button :href="route('login')">{{ __('Login') }}</flux:button>
@@ -78,11 +78,11 @@
 
     <flux:navlist variant="outline">
         @if (auth()->check())
-            @if (auth()->user()->is_admin)
+            @role('admin')
                 <flux:navlist.item :href="route('admin.dashboard')">
                     {{ __('Admin Dashboard') }}
                 </flux:navlist.item>
-            @endif
+            @endrole
         @else
             <flux:navlist.item :href="route('login')">
                 {{ __('Login') }}
