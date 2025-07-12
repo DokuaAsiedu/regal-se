@@ -23,6 +23,7 @@ class User extends Authenticatable
         'email',
         'status_id',
         'password',
+        'role_id',
     ];
 
     /**
@@ -63,5 +64,15 @@ class User extends Authenticatable
     public function status()
     {
         return $this->belongsTo(Status::class);
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function hasRole($code): bool
+    {
+        return $this->role?->code == $code;
     }
 }

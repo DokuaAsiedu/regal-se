@@ -73,6 +73,9 @@ final class UsersTable extends PowerGridComponent
             ->add('status_name', function ($row) {
                 return Blade::render('components.status', ['status' => $row->status]);
             })
+            ->add('role_name', function ($row) {
+                return $row->role->name ?? 'N/A';
+            })
             ->add('created_at');
     }
 
@@ -85,6 +88,10 @@ final class UsersTable extends PowerGridComponent
                 ->bodyAttribute('flex items-center gap-5'),
 
             Column::make('Email', 'email')
+                ->sortable()
+                ->searchable(),
+
+            Column::make('Role', 'role_name')
                 ->sortable()
                 ->searchable(),
 

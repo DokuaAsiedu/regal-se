@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Users;
 
+use App\Services\RoleService;
 use App\Services\UserService;
 use App\Traits\HandlesErrorMessage;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +20,7 @@ class Create extends Component
     public $password;
     public $password_confirmation;
     public $status = "";
+    public $role = "";
 
     public $id;
     public $user;
@@ -28,6 +30,7 @@ class Create extends Component
     public $error_message;
 
     protected $userService;
+    protected $roleService;
 
     public function rules() {
         $state = isset($this->id) ? 'nullable' : 'required';
@@ -42,6 +45,7 @@ class Create extends Component
                 'min:8',
                 'confirmed',
             ],
+            'role' => 'exists:roles,id',
         ];
     }
 
@@ -55,15 +59,22 @@ class Create extends Component
         }
     }
 
-    public function boot(UserService $userService)
+    public function boot(UserService $userService, RoleService $roleService)
     {
         $this->userService = $userService;
+        $this->roleService = $roleService;
     }
 
     #[Computed()]
     public function validStatuses()
     {
         return $this->userService->validStatuses();
+    }
+
+    #[Computed()]
+    public function roles()
+    {
+        return $this->roleService->all()->get();
     }
 
     public function loadData($id)
@@ -73,6 +84,7 @@ class Create extends Component
             $this->name = $this->user->name ?? '';
             $this->email = $this->user->email ?? '';
             $this->status = $this->user->status->id ?? '';
+            $this->role = $this->user->role->id ?? '';
 
             $this->header = __('Edit User');
             $this->success_message = __('User successfully updated');
@@ -92,6 +104,7 @@ class Create extends Component
                 'email' => $this->email,
                 'password' => Hash::make($this->password),
                 'status_id' => $this->status,
+                'role_id' => $this->role,
             ];
             if (isset($this->id)) {
                 $this->userService->update($this->id, $payload);

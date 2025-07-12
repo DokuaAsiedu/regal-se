@@ -37,6 +37,17 @@
             <flux:error name="status" />
         </div>
 
+        <div class="flex flex-col gap-2">
+            <label for="role">{{ __('Role') }}<x-required /></label>
+            <flux:select id="role" wire:model="role">
+                <flux:select.option value="" disabled>{{ __('Select an option...') }}</flux:select.option>
+                @foreach ($this->roles as $item)
+                    <flux:select.option value="{{ $item->id }}">{{ $item->name }}</flux:select.option>
+                @endforeach
+            </flux:select>
+            <flux:error name="status" />
+        </div>
+
         <x-button :name="__('Save')" type="submit" class="lg:col-span-2" />
     </form>
 </div>
