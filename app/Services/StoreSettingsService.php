@@ -40,4 +40,25 @@ class StoreSettingsService
     {
         return $this->storeSettingsRepository->allQuery($search);
     }
+
+    public function downPaymentPercentage()
+    {
+        return $this->allQuery(['code' => 'down_payment_percentage'])
+            ->first()
+            ->value;
+    }
+
+    public function repaymentMonths()
+    {
+        return $this->allQuery(['code' => 'repayment_months'])
+            ->first()
+            ->value;
+    }
+
+    public function currencySymbol()
+    {
+        return $this->allQuery(['code' => 'currency_symbol'])
+            ->first()
+            ->value;
+    }
 }

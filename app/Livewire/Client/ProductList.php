@@ -42,27 +42,21 @@ class ProductList extends Component
     public function currency()
     {
         return $this->storeSettingsService
-            ->allQuery(['code' => 'currency_symbol'])
-            ->first()
-            ->value;
+            ->currencySymbol();
     }
 
     #[Computed]
     public function repaymentMonths()
     {
         return $this->storeSettingsService
-            ->allQuery(['code' => 'repayment_months'])
-            ->first()
-            ->value;
+            ->repaymentMonths();
     }
 
     #[Computed]
     public function downPaymentPercentage()
     {
         return $this->storeSettingsService
-            ->allQuery(['code' => 'down_payment_percentage'])
-            ->first()
-            ->value;
+            ->downPaymentPercentage();
     }
 
 
