@@ -12,7 +12,7 @@
                     </div>
                     @if ($product->quantity > 0)
                         <div class="flex justify-between items-stretch">
-                            <button type="button" class="px-6 py-2 bg-gray-200 rounded-full text-xs">CASH
+                            <button type="button" class="px-6 py-2 bg-gray-200 rounded-full text-xs" wire:click="addToCart({{ $product->id }})">CASH
                                 {{ $this->currency . ' ' . number_format($product->selling_price) }}</button>
                             @php
                                 $down_payment_amount = ($this->downPaymentPercentage / 100) * $product->selling_price;

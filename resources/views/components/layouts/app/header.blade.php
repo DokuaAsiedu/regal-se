@@ -11,6 +11,9 @@
         <flux:tooltip :content="__('Search')" position="bottom">
             <flux:navbar.item class="!h-10 [&>div>svg]:size-5" icon="magnifying-glass" href="#" :label="__('Search')" />
         </flux:tooltip>
+        <flux:tooltip :content="__('Cart')" position="bottom">
+            <flux:navbar.item class="!h-10 [&>div>svg]:size-5" icon="shopping-cart" :href="route('cart')" :label="__('Cart')" />
+        </flux:tooltip>
     </flux:navbar>
 
     <!-- Desktop User Menu -->

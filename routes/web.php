@@ -4,10 +4,14 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\StoreSettingsController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\HomeController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::group([], function () {
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('cart', [CartController::class, 'index'])->name('cart');
+});
 
 Route::view('dashboard', 'admin.dashboard')
     ->middleware(['auth', 'verified', 'admin'])

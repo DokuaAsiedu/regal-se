@@ -5,6 +5,7 @@ namespace App\Livewire\Auth;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\User;
+use App\Services\CartService;
 use App\Services\RoleService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
@@ -25,10 +26,12 @@ class Register extends Component
     public string $password_confirmation = '';
 
     private $roleService;
+    protected $cartService;
 
-    public function boot(RoleService $roleService)
+    public function boot(RoleService $roleService, CartService $cartService)
     {
         $this->roleService = $roleService;
+        $this->cartService = $cartService;
     }
 
     /**
@@ -57,6 +60,8 @@ class Register extends Component
         event(new Registered(($user = User::create($input))));
 
         Auth::login($user);
+
+        $this->cartService->syncSessionCartToDatabase();
 
         $this->redirect(route('home', absolute: false), navigate: true);
     }

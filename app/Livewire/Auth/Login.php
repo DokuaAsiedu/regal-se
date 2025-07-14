@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Auth;
 
+use App\Services\CartService;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
@@ -23,6 +24,13 @@ class Login extends Component
 
     public bool $remember = false;
 
+    protected $cartService;
+
+    public function boot(CartService $cartService)
+    {
+        $this->cartService = $cartService;
+    }
+
     /**
      * Handle an incoming authentication request.
      */
@@ -39,6 +47,8 @@ class Login extends Component
                 'email' => __('auth.failed'),
             ]);
         }
+
+        $this->cartService->syncSessionCartToDatabase();
 
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();
