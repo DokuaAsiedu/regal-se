@@ -60,6 +60,11 @@ class ProductService
         $this->productRepository->delete($ids);
     }
 
+    public function allQuery($search)
+    {
+        return $this->productRepository->allQuery($search);
+    }
+
     public function validStatuses()
     {
         return Status::whereIn('code', ['active', 'inactive'])

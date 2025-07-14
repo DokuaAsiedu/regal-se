@@ -7,6 +7,7 @@ use App\Models\Product;
 class ProductRepository extends BaseRepository
 {
     private $fieldsSearchable = [
+        'id',
         'code',
         'name',
         'cost_price',
