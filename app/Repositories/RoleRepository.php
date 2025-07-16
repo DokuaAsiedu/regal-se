@@ -7,6 +7,7 @@ use App\Models\Role;
 class RoleRepository extends BaseRepository
 {
     private $fieldsSearchable = [
+        'id',
         'code',
         'name',
         'status_id',

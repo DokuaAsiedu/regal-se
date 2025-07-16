@@ -7,6 +7,7 @@ use App\Models\Category;
 class CategoryRepository extends BaseRepository
 {
     private $fieldsSearchable = [
+        'id',
         'code',
         'name',
         'description',

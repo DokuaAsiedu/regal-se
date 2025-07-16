@@ -74,7 +74,7 @@ class Create extends Component
     #[Computed()]
     public function roles()
     {
-        return $this->roleService->all()->get();
+        return $this->roleService->all();
     }
 
     public function loadData($id)

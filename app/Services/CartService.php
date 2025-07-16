@@ -47,7 +47,7 @@ class CartService
         $this->cartItemRepository->delete($ids);
     }
 
-    public function allQuery($search)
+    public function allQuery($search = [])
     {
         return $this->cartItemRepository->allQuery($search);
     }

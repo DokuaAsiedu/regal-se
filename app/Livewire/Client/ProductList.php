@@ -81,7 +81,7 @@ class ProductList extends Component
 
     public function render()
     {
-        $products = $this->productService->allQuery([])->active()->quantityAvailable()->paginate(20);
+        $products = $this->productService->allQuery()->active()->quantityAvailable()->paginate(20);
 
         return view('livewire.client.product-list', [
             'products' => $products,

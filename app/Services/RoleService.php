@@ -23,7 +23,12 @@ class RoleService
 
     public function all()
     {
-        return $this->roleRepository->allQuery();
+        return $this->roleRepository->all();
+    }
+
+    public function allQuery($search = [])
+    {
+        return $this->roleRepository->allQuery($search);
     }
 
     public function adminRole()

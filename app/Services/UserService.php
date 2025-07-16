@@ -23,9 +23,14 @@ class UserService
         return $this->userRepository->find($id);
     }
 
-    public function products()
+    public function all()
     {
-        return $this->userRepository->allQuery();
+        return $this->userRepository->all();
+    }
+
+    public function allQuery($search = [])
+    {
+        return $this->userRepository->allQuery($search);
     }
 
     public function store($input)
@@ -55,7 +60,7 @@ class UserService
 
     public function checkIfEmailExists($email, $id = null)
     {
-        $exists = $this->products()
+        $exists = $this->allQuery()
             ->when($id, fn($query) => $query->where('id', '!=', $id))
             ->where('email', $email)
             ->exists();

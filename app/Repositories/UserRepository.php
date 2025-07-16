@@ -7,6 +7,7 @@ use App\Models\User;
 class UserRepository extends BaseRepository
 {
     private $fieldsSearchable = [
+        'id',
         'name',
         'email',
         'status_id',

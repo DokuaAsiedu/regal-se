@@ -8,6 +8,7 @@ use App\Repositories\BaseRepository;
 class StoreSettingsRepository extends BaseRepository
 {
     private $fieldsSearchable = [
+        'id',
         'name',
         'code',
         'value',

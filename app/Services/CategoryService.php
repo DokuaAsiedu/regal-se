@@ -24,9 +24,14 @@ class CategoryService
         return $this->categoryRepository->find($id);
     }
 
-    public function products()
+    public function all()
     {
-        return $this->categoryRepository->allQuery();
+        return $this->categoryRepository->all();
+    }
+
+    public function allQuery($search = [])
+    {
+        return $this->categoryRepository->allQuery($search);
     }
 
     public function store($input)
@@ -80,7 +85,7 @@ class CategoryService
 
     public function checkIfCodeExists($code, $id = null)
     {
-        $exists = $this->products()
+        $exists = $this->allQuery()
             ->when($id, fn($query) => $query->where('id', '!=', $id))
             ->where('code', $code)
             ->exists();
@@ -92,7 +97,7 @@ class CategoryService
 
     public function checkIfNameExists($name, $id = null)
     {
-        $exists = $this->products()
+        $exists = $this->allQuery()
             ->when($id, fn($query) => $query->where('id', '!=', $id))
             ->where('name', $name)
             ->exists();

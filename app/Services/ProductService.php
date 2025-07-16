@@ -24,9 +24,9 @@ class ProductService
         return $this->productRepository->find($id);
     }
 
-    public function products()
+    public function all()
     {
-        return $this->productRepository->allQuery();
+        return $this->productRepository->all();
     }
 
     public function store($input)
@@ -60,7 +60,7 @@ class ProductService
         $this->productRepository->delete($ids);
     }
 
-    public function allQuery($search)
+    public function allQuery($search = [])
     {
         return $this->productRepository->allQuery($search);
     }
@@ -85,7 +85,7 @@ class ProductService
 
     public function checkIfCodeExists($code, $id = null)
     {
-        $exists = $this->products()
+        $exists = $this->allQuery()
             ->when($id, fn($query) => $query->where('id', '!=', $id))
             ->where('code', $code)
             ->exists();
@@ -97,7 +97,7 @@ class ProductService
 
     public function checkIfNameExists($name, $id = null)
     {
-        $exists = $this->products()
+        $exists = $this->allQuery()
             ->when($id, fn($query) => $query->where('id', '!=', $id))
             ->where('name', $name)
             ->exists();

@@ -21,9 +21,9 @@ class StoreSettingsService
         return $this->storeSettingsRepository->find($id);
     }
 
-    public function settings()
+    public function all()
     {
-        return $this->storeSettingsRepository->allQuery();
+        return $this->storeSettingsRepository->all();
     }
 
     public function store($input)
@@ -36,7 +36,7 @@ class StoreSettingsService
         return $this->storeSettingsRepository->update($input, $id);
     }
 
-    public function allQuery($search)
+    public function allQuery($search = [])
     {
         return $this->storeSettingsRepository->allQuery($search);
     }
