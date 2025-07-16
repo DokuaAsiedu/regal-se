@@ -122,8 +122,13 @@ class CartService
             }
 
             if ($quantity > 0) {
-                $existing_item['quantity'] = $quantity;
-                $existing_item['payment_plan'] = $payment_plan;
+                $cart_items = $cart_items->map(function ($item) use ($product_id, $quantity, $payment_plan) {
+                    if ($item['product_id'] == $product_id) {
+                        $item['quantity'] = $quantity;
+                        $item['payment_plan'] = $payment_plan;
+                    }
+                    return $item;
+                });
             } else {
                 $cart_items = $cart_items->reject(fn($item) => $item['product_id'] == $product_id);
             }
