@@ -37,7 +37,6 @@ class AdminUserSeeder extends Seeder
             'password' => Hash::make('regal.se#2711'),
             'email_verified_at' => now(),
             'status_id' => $status_id,
-            'is_admin' => true,
             'role_id' => $admin_role_id,
         ]);
     }
