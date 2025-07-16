@@ -91,7 +91,7 @@ class UserCart extends Component
         }
     }
 
-    public function updateQuantity($quantity, $product_id)
+    public function updateQuantity(int $quantity, $product_id)
     {
         try {
             $product = $this->cart_items->where('product_id', $product_id)->first();
