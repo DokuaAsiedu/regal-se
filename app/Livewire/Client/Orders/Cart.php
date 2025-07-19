@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Client\Cart;
+namespace App\Livewire\Client\Orders;
 
 use App\Services\CartService;
 use App\Services\ProductService;
@@ -10,12 +10,14 @@ use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Throwable;
 
-class UserCart extends Component
+class Cart extends Component
 {
     use HandlesErrorMessage;
 
     public $cart_items;
     public $products = [];
+
+    public $allow_order = false;
 
     protected $cartService;
     protected $productService;
@@ -41,18 +43,11 @@ class UserCart extends Component
     public function loadData()
     {
         $this->cart_items = $this->cartService->userCart();
-        $this->products = [];
-        // dd($this->cart_items);
-        foreach ($this->cart_items as $elem) {
-            $product = $this->productService->allQuery([
-                'id' => $elem->product_id,
-            ])->first();
 
-            if ($product) {
-                $product->order_quantity = $elem->quantity;
-                $product->payment_plan = $elem->payment_plan;
-                array_push($this->products, $product);
-            }
+        if (count($this->cart_items) > 0) {
+            $this->allow_order = true;
+        } else {
+            $this->allow_order = false;
         }
     }
 
@@ -104,8 +99,19 @@ class UserCart extends Component
         }
     }
 
+    public function removeFromCart($product_id)
+    {
+        try {
+            $this->cartService->removeFromCart($product_id);
+            $this->loadData();
+        } catch (Throwable $err) {
+            $this->handle($err)->message;
+            toastr()->error(__('Error updating quantity'));
+        }
+    }
+
     public function render()
     {
-        return view('livewire.client.cart.user-cart');
+        return view('livewire.client.orders.cart');
     }
 }

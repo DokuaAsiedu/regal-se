@@ -9,6 +9,7 @@ class CartItemRepository extends BaseRepository
     private $fieldsSearchable = [
         'id',
         'user_id',
+        'guest_id',
         'product_id',
         'quantity',
         'payment_plan'
