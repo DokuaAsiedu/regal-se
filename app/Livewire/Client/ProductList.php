@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Client;
 
+use App\Enums\PaymentPlan;
 use App\Services\CartService;
 use App\Services\ProductService;
 use App\Services\StoreSettingsService;
@@ -64,12 +65,13 @@ class ProductList extends Component
             ->downPaymentPercentage();
     }
 
-    public function addToCart($product_id)
+    public function addToCart($product_id, $is_installment = false)
     {
         try {
             $product = $this->productService->find($product_id);
+            $payment_plan = $is_installment ? PaymentPlan::Installment->value : PaymentPlan::Once->value;
             DB::beginTransaction();
-            $this->cartService->addToCart($product->id);
+            $this->cartService->addToCart(product_id: $product->id, payment_plan: $payment_plan);
             DB::commit();
             toastr()->success('Item added to cart');
         } catch (Throwable $err) {

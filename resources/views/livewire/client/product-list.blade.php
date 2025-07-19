@@ -19,7 +19,7 @@
                                 $remainder = $product->selling_price - $down_payment_amount;
                                 $installment_amount = $remainder / $this->repaymentMonths;
                             @endphp
-                            <button type="button" class="px-6 py-2 bg-gray-200 flex flex-col gap-px rounded-full text-xs">
+                            <button type="button" class="px-6 py-2 bg-gray-200 flex flex-col gap-px rounded-full text-xs" wire:click="addToCart({{ $product->id }}, {{ true }})">
                                 <span>{{ $this->currency . ' ' . number_format($installment_amount) . '/' . $this->repaymentMonths . ' months' }}</span>
                                 <span class="text-tiny">{{ "Plus $this->downPaymentPercentage% down payment" }}</span>
                             </button>
