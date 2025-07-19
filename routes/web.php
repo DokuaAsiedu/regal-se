@@ -4,13 +4,14 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\StoreSettingsController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\Client\OrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([], function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
-    Route::get('cart', [CartController::class, 'index'])->name('cart');
+    Route::get('cart', [OrderController::class, 'cart'])->name('cart');
+    Route::get('checkout', [OrderController::class, 'checkout'])->name('checkout');
 });
 
 Route::view('dashboard', 'admin.dashboard')
