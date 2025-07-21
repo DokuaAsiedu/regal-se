@@ -86,6 +86,7 @@
 @script
 <script>
     let iti = window.initIntlTelInput('customer_phone');
+    iti.setCountry($wire.customer_phone_country_code)
 
     Livewire.hook('morphed', ({ component, cleanup }) => {
         iti = window.initIntlTelInput('customer_phone');

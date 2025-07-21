@@ -7,6 +7,7 @@ use App\Services\CartService;
 use App\Services\ProductService;
 use App\Services\StoreSettingsService;
 use App\Traits\HandlesErrorMessage;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
@@ -22,14 +23,14 @@ class Checkout extends Component
 
     public $allow_order;
 
-    public $customer_name = 'Test Customer';
-    public $customer_phone = '261222644';
+    public $customer_name;
+    public $customer_phone;
     public $customer_phone_prefix;
     public $customer_phone_country_code;
     public $customer_email;
-    public $delivery_address = 'Some address';
-    public $landmark = 'Some landmark';
-    public $delivery_note = 'Some note';
+    public $delivery_address;
+    public $landmark;
+    public $delivery_note;
 
     protected $cartService;
     protected $productService;
@@ -68,6 +69,16 @@ class Checkout extends Component
     public function loadData()
     {
         $this->cart_items = $this->cartService->userCart();
+
+        if (Auth::check()) {
+            $user = Auth::user();
+            $this->customer_name = $user->name ?? '';
+            $this->customer_phone = $user->phone ?? '';
+            $this->customer_email = $user->email ?? '';
+            $this->delivery_address = $user->delivery_address ?? '';
+            $this->landmark = $user->delivery_landmark ?? '';
+            $this->customer_phone_country_code = $user->phone_country_code ?? 'gh';
+        }
         $this->subtotal = $this->cartService->calculateCartValue();
         $this->total_amount = $this->subtotal;
 
