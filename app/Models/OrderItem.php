@@ -41,4 +41,14 @@ class OrderItem extends Model
         ->logOnly(['*']);
         // Chain fluent methods for configuration options
     }
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

@@ -7,6 +7,7 @@ use App\Repositories\OrderItemRepository;
 use App\Repositories\OrderRepository;
 use App\Services\CartService;
 use App\Services\StatusService;
+use Illuminate\Support\Facades\Auth;
 
 class OrderService
 {
@@ -54,9 +55,7 @@ class OrderService
 
     public function update($id, $input)
     {
-        if (empty($input['code'])) {
-            $input['code'] = $this->generateCode($input['code']);
-        } else {
+        if (isset($input['code'])) {
             $this->checkIfCodeExists($input['code'], $id);
         }
 
@@ -110,6 +109,7 @@ class OrderService
         }
 
         $input['total_amount'] = $this->cartService->calculateCartValue();
+        $input['user_id'] = Auth::check() ? Auth::id() : null;
         $input['status_id'] = $this->statusService->pending()->id ?? null;
         $order = $this->store($input);
         $order_id = $order->id;
@@ -122,5 +122,10 @@ class OrderService
         // dd($order_items);
 
         $this->cartService->deleteCart();
+    }
+
+    public function isPending($order)
+    {
+        return $order->status_id == $this->statusService->pending()->id;
     }
 }

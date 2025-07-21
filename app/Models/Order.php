@@ -29,4 +29,19 @@ class Order extends Model
         ->logOnly(['*']);
         // Chain fluent methods for configuration options
     }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class);
+    }
 }

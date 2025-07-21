@@ -23,9 +23,14 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone_prefix',
+        'phone',
+        'phone_country_code',
         'status_id',
         'password',
         'role_id',
+        'delivery_address',
+        'delivery_address_landmark',
     ];
 
     /**
@@ -83,5 +88,10 @@ class User extends Authenticatable
     public function hasRole($code): bool
     {
         return $this->role?->code == $code;
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\StoreSettingsController;
 use App\Http\Controllers\Admin\UserController;
@@ -20,6 +21,7 @@ Route::view('dashboard', 'admin.dashboard')
     ->prefix('admin');
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::resource('orders', AdminOrderController::class);
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('users', UserController::class);
