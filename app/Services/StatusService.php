@@ -82,4 +82,39 @@ class StatusService
         return $this->statusRepository->allQuery(['code' => 'suspended'])
             ->first();
     }
+
+    public function isActive($status_id)
+    {
+        return $status_id == $this->active()->id;
+    }
+
+    public function isInactive($status_id)
+    {
+        return $status_id == $this->inActive()->id;
+    }
+
+    public function isPending($status_id)
+    {
+        return $status_id == $this->pending()->id;
+    }
+
+    public function isApproved($status_id)
+    {
+        return $status_id == $this->approved()->id;
+    }
+
+    public function isCompleted($status_id)
+    {
+        return $status_id == $this->completed()->id;
+    }
+
+    public function isDeclined($status_id)
+    {
+        return $status_id == $this->declined()->id;
+    }
+
+    public function isSuspended($status_id)
+    {
+        return $status_id == $this->suspended()->id;
+    }
 }
