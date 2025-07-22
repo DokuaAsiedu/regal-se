@@ -22,3 +22,11 @@ window.initIntlTelInput = function (elem_id) {
         return iti;
     }
 };
+
+window.addEventListener('delay-reload', function (event) {
+    const delay = event.detail.delay || 3000;
+    window.setTimeout(function () {
+        console.log('delaying', delay)
+        window.location.reload()
+    }, delay)
+})
