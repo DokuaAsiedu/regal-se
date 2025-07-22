@@ -10,6 +10,9 @@ class UserRepository extends BaseRepository
         'id',
         'name',
         'email',
+        'phone_prefix',
+        'phone',
+        'phone_country_code',
         'status_id',
     ];
 
