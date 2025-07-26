@@ -39,4 +39,9 @@ class KYCSubmission extends Model
         ->logOnly(['*']);
         // Chain fluent methods for configuration options
     }
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class);
+    }
 }

@@ -15,6 +15,7 @@
                 <flux:navlist.item icon="cog" :href="route('store-settings.edit')" :current="request()->routeIs('store-settings.edit')" wire:navigate>{{ ('Store Settings') }}</flux:navlist.item>
             </flux:navlist.group>
             <flux:navlist.item icon="users" :href="route('users.index')" :current="request()->routeIs('users.index')" wire:navigate>{{ __('Users') }}</flux:navlist.item>
+            <flux:navlist.item icon="document-text" :href="route('kyc.index')" :current="request()->routeIs('kyc.index')" wire:navigate>{{ __('KYC Submissions') }}</flux:navlist.item>
         </flux:navlist.group>
     </flux:navlist>
 

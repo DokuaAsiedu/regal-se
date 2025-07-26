@@ -124,4 +124,16 @@ class KYCService
             'status_id' => $this->statusService->pending()->id,
         ]);
     }
+
+    public function approveKYC($kyc)
+    {
+        $kyc->status_id = $this->statusService->approved()->id;
+        $kyc->save();
+    }
+
+    public function rejectKYC($kyc)
+    {
+        $kyc->status_id = $this->statusService->rejected()->id;
+        $kyc->save();
+    }
 }
