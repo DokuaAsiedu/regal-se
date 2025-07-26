@@ -1,6 +1,6 @@
 <div class="flex flex-col gap-6">
     @if (!$edit_mode)
-        <div wire:submit="save" class="grid lg:grid-cols-2 gap-6">
+        <div class="grid lg:grid-cols-2 gap-6">
             <div class="col-span-1 lg:col-span-2 flex flex-col gap-2">
                 <flux:heading level="2" size="xl" class="">{{ __('Personal Details') }}
                 </flux:heading>
