@@ -77,6 +77,12 @@ class StatusService
             ->first();
     }
 
+    public function rejected()
+    {
+        return $this->statusRepository->allQuery(['code' => 'rejected'])
+            ->first();
+    }
+
     public function suspended()
     {
         return $this->statusRepository->allQuery(['code' => 'suspended'])
@@ -111,6 +117,11 @@ class StatusService
     public function isDeclined($status_id)
     {
         return $status_id == $this->declined()->id;
+    }
+
+    public function isRejected($status_id)
+    {
+        return $status_id == $this->rejected()->id;
     }
 
     public function isSuspended($status_id)

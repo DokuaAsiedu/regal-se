@@ -8,16 +8,18 @@
             'approved' => 'emerald',
             'completed' => 'green',
             'declined' => 'red',
+            'rejected' => 'rose',
             'suspended' => 'zinc',
             default => 'teal'
         };
         $badge = match ($code) {
             'active' => 'pill',
             'inactive' => 'pill',
-            'pending' => 'solid',
+            'pending' => 'pill',
             'approved' => 'solid',
             'completed' => 'solid',
             'declined' => 'solid',
+            'rejected' => 'solid',
             'suspended' => 'pill',
             default => 'pill'
         };
