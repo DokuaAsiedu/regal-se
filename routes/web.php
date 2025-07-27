@@ -7,15 +7,15 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\StoreSettingsController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\Client\KYCController as ClientKYCController;
 use App\Http\Controllers\Client\OrderController;
-use App\Http\Controllers\Client\UserController as ClientUserController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([], function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('cart', [OrderController::class, 'cart'])->name('cart');
     Route::get('checkout', [OrderController::class, 'checkout'])->name('checkout');
-    Route::get('users/kyc', [ClientUserController::class, 'kyc']);
+    Route::get('kyc', [ClientKYCController::class, 'index']);
 });
 
 Route::view('dashboard', 'admin.dashboard')

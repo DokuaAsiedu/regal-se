@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Client\Users;
+namespace App\Livewire\Client\Kyc;
 
 use App\Services\KYCService;
 use App\Services\StatusService;
@@ -171,6 +171,6 @@ class KYC extends Component
 
     public function render()
     {
-        return view('livewire.client.users.kyc');
+        return view('livewire.client.kyc.kyc');
     }
 }

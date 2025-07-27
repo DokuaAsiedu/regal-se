@@ -1,6 +1,6 @@
 <x-layouts.client>
     <div class="flex flex-col gap-3">
-        <livewire:client.users.kyc />
+        <livewire:client.kyc.kyc />
     </div>
 </x-layouts.client>
 <!-- Be present above all else. - Naval Ravikant -->

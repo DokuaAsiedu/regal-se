@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class KYCController extends Controller
 {
-    public function kyc()
+    public function index()
     {
-        return view('client.users.kyc');
+        return view('client.kyc.index');
     }
 }
