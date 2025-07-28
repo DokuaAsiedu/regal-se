@@ -129,4 +129,13 @@ class OrderService
     {
         return $order->status_id == $this->statusService->pending()->id;
     }
+
+    public function approve($order)
+    {
+        $payload = [
+            'status_id' => $this->statusService->approved()->id,
+        ];
+
+        $order->update($payload);
+    }
 }

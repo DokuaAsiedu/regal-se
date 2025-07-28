@@ -47,10 +47,7 @@ class Show extends Component
     {
         try {
             DB::beginTransaction();
-            $payload = [
-                'status_id' => $this->statusService->approved()->id,
-            ];
-            $this->orderService->update($this->order_id, $payload);
+            $this->orderService->approve($this->order);
             DB::commit();
             $this->loadData();
             toastr()->success(__('Successfully approved order'));
