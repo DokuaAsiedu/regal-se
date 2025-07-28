@@ -6,6 +6,7 @@ use App\Enums\PaymentPlan;
 use App\Exceptions\CustomException;
 use App\Models\Order;
 use App\Notifications\OrderApproved;
+use App\Notifications\OrderPlaced;
 use App\Repositories\OrderItemRepository;
 use App\Repositories\OrderRepository;
 use App\Services\CartService;
@@ -19,16 +20,18 @@ class OrderService
     protected $statusService;
     protected $cartService;
     protected $orderItemRepository;
+    protected $userService;
 
     /**
      * Create a new class instance.
      */
-    public function __construct(OrderRepository $orderRepository, StatusService $statusService, CartService $cartService, OrderItemRepository $orderItemRepository)
+    public function __construct(OrderRepository $orderRepository, StatusService $statusService, CartService $cartService, OrderItemRepository $orderItemRepository, UserService $userService)
     {
         $this->orderRepository = $orderRepository;
         $this->statusService = $statusService;
         $this->cartService = $cartService;
         $this->orderItemRepository = $orderItemRepository;
+        $this->userService = $userService;
     }
 
     public function find($id)
@@ -124,9 +127,27 @@ class OrderService
 
             $this->orderItemRepository->create($elem->toArray());
         });
-        // dd($order_items);
 
         $this->cartService->deleteCart();
+
+        // send notification
+        $this->sendOrderPlacedNotification($order);
+    }
+
+    public function sendOrderPlacedNotification(Order $order)
+    {
+        // notify customer via mail
+        Notification::route('mail', $order->customer_email)
+            ->notify(new OrderPlaced($order));
+
+        // if customer is a user send database notification
+        if ($order->user) {
+            Notification::send($order->user, new OrderPlaced($order));
+        }
+
+        // notify admins
+        $admins = $this->userService->admins()->get();
+        Notification::send($admins, new OrderPlaced($order, OrderPlaced::ADMIN));
     }
 
     public function isPending($order)
