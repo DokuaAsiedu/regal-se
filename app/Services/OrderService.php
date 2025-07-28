@@ -2,12 +2,16 @@
 
 namespace App\Services;
 
+use App\Enums\PaymentPlan;
 use App\Exceptions\CustomException;
+use App\Models\Order;
+use App\Notifications\OrderApproved;
 use App\Repositories\OrderItemRepository;
 use App\Repositories\OrderRepository;
 use App\Services\CartService;
 use App\Services\StatusService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class OrderService
 {
@@ -137,5 +141,41 @@ class OrderService
         ];
 
         $order->update($payload);
+
+        Notification::route('mail', $order->customer_email)
+            ->notify(new OrderApproved($order));
+    }
+
+    public function getSubTotal(Order $order)
+    {
+        $order_items = $order->orderItems;
+        $value = 0;
+        foreach ($order_items as $elem) {
+            $value += $elem->unit_price * $elem->quantity;
+        }
+
+        return $value;
+    }
+
+    public function getOrderValue(Order $order)
+    {
+        $sub_total = $this->getSubTotal($order);
+
+        return $sub_total;
+    }
+
+    public function getOrderInitialPayment(Order $order)
+    {
+        $order_items = $order->orderItems;
+        $value = 0;
+        foreach ($order_items as $elem) {
+            if ($elem->payment_plan == PaymentPlan::Installment) {
+                $value += $elem->down_payment_amount * $elem->quantity;
+            } else {
+                $value += $elem->unit_price * $elem->quantity;
+            }
+        }
+
+        return $value;
     }
 }
