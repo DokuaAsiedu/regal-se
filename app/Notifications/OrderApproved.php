@@ -42,7 +42,6 @@ class OrderApproved extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Your Order Confirmation')
             ->markdown('mail.order-approved', [
                 'order' => $this->order,
                 'order_total' => $this->orderService->getOrderValue($this->order),

@@ -1,6 +1,6 @@
 <x-mail::message>
 <style>
-    .main-table thead tr, .main-table tbody tr:not(:last-child) {
+    .main-table thead tr, .main-table tbody tr {
         border-bottom: 1px solid gray;
     }
 
@@ -8,7 +8,7 @@
         padding: 0.5rem 0;
     }
 </style>
-# Hello {{ $user->customer_name ?? 'there' }},
+# Hello {{ $order->customer_name ?? 'there' }},
 
 Your order **#{{ $order->code }}** has been approved. Please find your order summary below:
 
@@ -44,15 +44,11 @@ Your order **#{{ $order->code }}** has been approved. Please find your order sum
 
 <br/>
 
-<div style="display:flex; flex-direction: column; align-items: end">
-    <flux:text><b>{{ __('Total:') }}</b> {{ formatCurrency($sub_total) }}</flux:text>
-    <flux:text><b>{{ __('Pay Now:') }}</b> {{ formatCurrency($initial_payment) }}</flux:text>
-</div>
+<flux:text style="text-end"><b>{{ __('Total:') }}</b> {{ formatCurrency($sub_total) }}</flux:text>
+<flux:text style="text-end"><b>{{ __('Pay Now:') }}</b> {{ formatCurrency($initial_payment) }}</flux:text>
 
 <br/>
 Thank you for choosing us!
-
-<br/>
 <br/>
 Regards,
 <br/>
