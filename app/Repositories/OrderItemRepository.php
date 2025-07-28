@@ -10,6 +10,7 @@ class OrderItemRepository extends BaseRepository
         'id',
         'order_id',
         'product_id',
+        'product_name',
         'quantity',
         'unit_price',
         'payment_plan',

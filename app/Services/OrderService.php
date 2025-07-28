@@ -116,6 +116,7 @@ class OrderService
         $order_items->map(function ($elem) use ($order_id) {
             $elem->order_id = $order_id;
             $elem->unit_price = $elem->price;
+            $elem->product_name = $elem->name;
 
             $this->orderItemRepository->create($elem->toArray());
         });
