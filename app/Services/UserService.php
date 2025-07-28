@@ -12,14 +12,16 @@ class UserService
 {
     protected $userRepository;
     protected $cartService;
+    protected $roleService;
 
     /**
      * Create a new class instance.
      */
-    public function __construct(UserRepository $userRepository, CartService $cartService)
+    public function __construct(UserRepository $userRepository, CartService $cartService, RoleService $roleService)
     {
         $this->userRepository = $userRepository;
         $this->cartService = $cartService;
+        $this->roleService = $roleService;
     }
 
     public function find($id)
@@ -85,5 +87,19 @@ class UserService
         $this->cartService->syncSessionCartToDatabase();
 
         return $user;
+    }
+
+    public function admins()
+    {
+        $admin_role = $this->roleService->adminRole();
+
+        return $this->allQuery(['role_id' => $admin_role->id]);
+    }
+
+    public function customers()
+    {
+        $customerRole = $this->roleService->customerRole();
+
+        return $this->allQuery(['role_id' => $customerRole->id]);
     }
 }
