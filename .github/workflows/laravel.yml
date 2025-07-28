@@ -23,7 +23,10 @@ jobs:
     - name: Generate key
       run: php artisan key:generate
     - name: Optimize Laravel
-      run: php artisan optimize
+      run: |
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
     - name: Directory Permissions
       run: chmod -R 777 storage bootstrap/cache
     - name: Set up Node
