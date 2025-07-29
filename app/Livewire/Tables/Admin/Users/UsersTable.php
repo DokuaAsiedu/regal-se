@@ -9,14 +9,17 @@ use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\ComponentAttributeBag;
 use Illuminate\View\View;
+use Livewire\Attributes\On;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
+use Throwable;
 
 final class UsersTable extends PowerGridComponent
 {
@@ -25,6 +28,13 @@ final class UsersTable extends PowerGridComponent
     public string $tableName = 'users-table-sycnew-table';
 
     protected $listeners = ['refresh' => '$refresh'];
+
+    protected $userService;
+
+    public function boot(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
 
     public function setUp(): array
     {
@@ -111,11 +121,30 @@ final class UsersTable extends PowerGridComponent
         ];
     }
 
+    #[On('delete-user')]
+    public function deleteUser($id)
+    {
+        try {
+            DB::beginTransaction();
+            $this->userService->delete([$id]);
+            DB::commit();
+            $message = 'Successfully deleted user';
+            toastr()->success($message);
+            $this->dispatch('refresh');
+            $this->dispatch('closeModal');
+        } catch (Throwable $err) {
+            DB::rollBack();
+            $message = $this->handle($err)->message;
+            toastr()->error($message);
+        }
+    }
+
     public function showDeleteModal($id): void
     {
-        $this->dispatch('openModal', component: 'components.delete-confirmation-modal', arguments: [ 
-            'ids' =>  [$id],
-            'class' => UserService::class,
+        $this->dispatch('openModal', component: 'components.confirmation-modal', arguments: [ 
+            'event' => 'delete-user',
+            'id' =>  $id,
+            'confirmText' => __('Delete'),
         ]);
     }
 

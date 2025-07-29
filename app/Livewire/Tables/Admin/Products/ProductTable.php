@@ -9,7 +9,9 @@ use Flux\Flux;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use Livewire\Attributes\On;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Components\SetUp\Header;
@@ -118,11 +120,30 @@ final class ProductTable extends PowerGridComponent
         ];
     }
 
+    #[On('delete-product')]
+    public function deleteProduct($id)
+    {
+        try {
+            DB::beginTransaction();
+            $this->productService->delete([$id]);
+            DB::commit();
+            $message = 'Successfully deleted product';
+            toastr()->success($message);
+            $this->dispatch('refresh');
+            $this->dispatch('closeModal');
+        } catch (Throwable $err) {
+            DB::rollBack();
+            $message = $this->handle($err)->message;
+            toastr()->error($message);
+        }
+    }
+
     public function showDeleteModal($id): void
     {
-        $this->dispatch('openModal', component: 'components.delete-confirmation-modal', arguments: [ 
-            'ids' =>  [$id],
-            'class' => ProductService::class,
+        $this->dispatch('openModal', component: 'components.confirmation-modal', arguments: [ 
+            'event' => 'delete-product',
+            'id' =>  $id,
+            'confirmText' => __('Delete'),
         ]);
     }
 

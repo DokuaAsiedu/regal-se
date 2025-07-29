@@ -8,13 +8,16 @@ use App\Traits\HandlesErrorMessage;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use Livewire\Attributes\On;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
+use Throwable;
 
 final class CategoryTable extends PowerGridComponent
 {
@@ -100,11 +103,30 @@ final class CategoryTable extends PowerGridComponent
         ];
     }
 
+    #[On('delete-category')]
+    public function deleteCategory($id)
+    {
+        try {
+            DB::beginTransaction();
+            $this->categoryService->delete([$id]);
+            DB::commit();
+            $message = 'Successfully deleted category';
+            toastr()->success($message);
+            $this->dispatch('refresh');
+            $this->dispatch('closeModal');
+        } catch (Throwable $err) {
+            DB::rollBack();
+            $message = $this->handle($err)->message;
+            toastr()->error($message);
+        }
+    }
+
     public function showDeleteModal($id): void
     {
-        $this->dispatch('openModal', component: 'components.delete-confirmation-modal', arguments: [ 
-            'ids' =>  [$id],
-            'class' => CategoryService::class,
+        $this->dispatch('openModal', component: 'components.confirmation-modal', arguments: [
+            'event' => 'delete-category',
+            'id' =>  $id,
+            'confirmText' => __('Delete'),
         ]);
     }
 
