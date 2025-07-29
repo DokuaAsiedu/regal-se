@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\Roles;
 use App\Exceptions\CustomException;
 use App\Models\KYCSubmission;
+use App\Notifications\KYCApproved;
 use App\Notifications\KYCSubmitted;
 use App\Repositories\KYCSubmissionRepository;
 use App\Services\StatusService;
@@ -145,6 +146,14 @@ class KYCService
     {
         $kyc->status_id = $this->statusService->approved()->id;
         $kyc->save();
+
+        $this->sendKYCApprovedNotification($kyc);
+    }
+
+    public function sendKYCApprovedNotification(KYCSubmission $kyc)
+    {
+        // notify customer
+        $kyc->user->notify(new KYCApproved($kyc));
     }
 
     public function rejectKYC($kyc)
