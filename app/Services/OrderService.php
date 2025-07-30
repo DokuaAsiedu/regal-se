@@ -11,6 +11,7 @@ use App\Repositories\OrderItemRepository;
 use App\Repositories\OrderRepository;
 use App\Services\CartService;
 use App\Services\StatusService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 
@@ -21,17 +22,29 @@ class OrderService
     protected $cartService;
     protected $orderItemRepository;
     protected $userService;
+    protected $paymentService;
+    protected $storeSettingsService;
 
     /**
      * Create a new class instance.
      */
-    public function __construct(OrderRepository $orderRepository, StatusService $statusService, CartService $cartService, OrderItemRepository $orderItemRepository, UserService $userService)
+    public function __construct(
+        OrderRepository $orderRepository,
+        StatusService $statusService,
+        CartService $cartService,
+        OrderItemRepository $orderItemRepository,
+        UserService $userService,
+        PaymentService $paymentService,
+        StoreSettingsService $storeSettingsService,
+    )
     {
         $this->orderRepository = $orderRepository;
         $this->statusService = $statusService;
         $this->cartService = $cartService;
         $this->orderItemRepository = $orderItemRepository;
         $this->userService = $userService;
+        $this->paymentService = $paymentService;
+        $this->storeSettingsService = $storeSettingsService;
     }
 
     public function find($id)
@@ -163,8 +176,63 @@ class OrderService
 
         $order->update($payload);
 
+        // create payments
+        $this->createOrderPayments($order);
+
+        $this->sendOrderApprovedNotification($order);
+    }
+
+    public function sendOrderApprovedNotification(Order $order)
+    {
+        // send notification to customer
         Notification::route('mail', $order->customer_email)
             ->notify(new OrderApproved($order));
+    }
+
+    public function createOrderPayments(Order $order)
+    {
+        $first_payment_amount = 0;
+        $installment_amount = 0;
+        $installment_months = 1;
+        $first_due_date = Carbon::today();
+
+        foreach($order->orderItems as $elem) {
+            if ($elem->payment_plan == PaymentPlan::Once) {
+                $first_payment_amount += $elem->unit_price * $elem->quantity;
+            } else {
+                $first_payment_amount += $elem->down_payment_amount * $elem->quantity;
+                $installment_amount += $elem->installment_amount * $elem->quantity;
+                $installment_months = $elem->installment_months;
+            }
+        }
+
+        $order_class_name = get_class($order);
+        $order_id = $order->id;
+
+        $first_payment_payload = [
+            'payable_type' => $order_class_name,
+            'payable_id' => $order_id,
+            'amount' => $first_payment_amount,
+            'currency' => $this->storeSettingsService->currencyCode(),
+            'status_id' => $this->statusService->pending()->id,
+            'due_date' => $first_due_date,
+        ];
+        $this->paymentService->store($first_payment_payload);
+
+        if ($installment_amount > 0) {
+            for ($i = 0; $i < $installment_months; $i++) {
+                $due_date = $first_due_date->copy()->addMonths($i+1);
+                $payment_payload = [
+                    'payable_type' => $order_class_name,
+                    'payable_id' => $order_id,
+                    'amount' => $installment_amount,
+                    'currency' => $this->storeSettingsService->currencyCode(),
+                    'status_id' => $this->statusService->pending()->id,
+                    'due_date' => $due_date,
+                ];
+                $this->paymentService->store($payment_payload);
+            }
+        }
     }
 
     public function getSubTotal(Order $order)
