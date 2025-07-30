@@ -145,6 +145,8 @@ class KYCService
     public function approveKYC($kyc)
     {
         $kyc->status_id = $this->statusService->approved()->id;
+        $kyc->reviewed_by = Auth::id();
+        $kyc->rejection_reason = null;
         $kyc->save();
 
         $this->sendKYCApprovedNotification($kyc);
@@ -156,9 +158,11 @@ class KYCService
         $kyc->user->notify(new KYCApproved($kyc));
     }
 
-    public function rejectKYC($kyc)
+    public function rejectKYC($kyc, $rejection_reason)
     {
         $kyc->status_id = $this->statusService->rejected()->id;
+        $kyc->reviewed_by = Auth::id();
+        $kyc->rejection_reason = $rejection_reason;
         $kyc->save();
     }
 }

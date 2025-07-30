@@ -6,6 +6,7 @@ use App\Services\KYCService;
 use App\Services\StatusService;
 use App\Traits\HandlesErrorMessage;
 use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Throwable;
 
@@ -85,19 +86,33 @@ class Show extends Component
         }
     }
 
-    public function reject()
+    #[On('reject-kyc')]
+    public function reject($id, $reason)
     {
         try {
             DB::beginTransaction();
-            $this->kycService->rejectKYC($this->kyc);
+            $this->kycService->rejectKYC($this->kyc, $reason);
             DB::commit();
+            $message = __('KYC rejected');
+            toastr()->success($message);
+            $this->dispatch('closeModal');
             $this->loadData();
-            toastr()->success(__('KYC rejected'));
         } catch (Throwable $err) {
+            DB::rollBack();
             $default_message = __('Error rejecting KYC');
             $message = $this->handle($err, $default_message)->message;
             toastr()->error($message);
         }
+    }
+
+    public function showRejectionModal($id): void
+    {
+        $this->dispatch('openModal', component: 'components.confirmation-modal', arguments: [ 
+            'event' => 'reject-kyc',
+            'id' =>  $id,
+            'confirmText' => __('Reject'),
+            'showInput' => true,
+        ]);
     }
 
     public function render()

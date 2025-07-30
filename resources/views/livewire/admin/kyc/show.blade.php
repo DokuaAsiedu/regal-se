@@ -83,7 +83,7 @@
     </div>
     <div class="flex items-center justify-between gap-6">
         @if ($is_pending)
-            <flux:button variant="primary" color="red" class="grow" wire:click="reject">{{ __('Reject') }}</flux:button>
+            <flux:button variant="primary" color="red" class="grow" wire:click="showRejectionModal({{ $kyc_id }})">{{ __('Reject') }}</flux:button>
             <flux:button variant="primary" color="green" class="grow" wire:click="approve">{{ __('Approve') }}</flux:button>
         @endif
     </div>
