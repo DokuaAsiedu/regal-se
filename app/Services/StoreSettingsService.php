@@ -61,4 +61,18 @@ class StoreSettingsService
             ->first()
             ->value;
     }
+
+    public function currencyCode()
+    {
+        return $this->allQuery(['code' => 'currency_code'])
+            ->first()
+            ->value;
+    }
+
+    public function currencyName()
+    {
+        return $this->allQuery(['code' => 'currency_name'])
+            ->first()
+            ->value;
+    }
 }
