@@ -6,6 +6,7 @@ use App\Enums\Roles;
 use App\Exceptions\CustomException;
 use App\Models\KYCSubmission;
 use App\Notifications\KYCApproved;
+use App\Notifications\KYCRejected;
 use App\Notifications\KYCSubmitted;
 use App\Repositories\KYCSubmissionRepository;
 use App\Services\StatusService;
@@ -164,5 +165,11 @@ class KYCService
         $kyc->reviewed_by = Auth::id();
         $kyc->rejection_reason = $rejection_reason;
         $kyc->save();
+    }
+
+    public function sendKYCRejectedNotification(KYCSubmission $kyc)
+    {
+        // notify customer
+        $kyc->user->notify(new KYCRejected($kyc));
     }
 }
