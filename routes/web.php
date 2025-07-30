@@ -15,7 +15,7 @@ Route::group([], function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('cart', [OrderController::class, 'cart'])->name('cart');
     Route::get('checkout', [OrderController::class, 'checkout'])->name('checkout');
-    Route::get('kyc', [ClientKYCController::class, 'index']);
+    Route::get('kyc', [ClientKYCController::class, 'index'])->name('client.kyc');
 });
 
 Route::view('dashboard', 'admin.dashboard')
