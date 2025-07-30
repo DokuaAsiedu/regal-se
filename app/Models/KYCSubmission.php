@@ -31,6 +31,8 @@ class KYCSubmission extends Model
         'customer_employment_start_date',
         'status_id',
         'user_id',
+        'reviewed_by',
+        'rejection_reason',
     ];
 
     public function getActivitylogOptions(): LogOptions
@@ -48,5 +50,10 @@ class KYCSubmission extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function reviewedBy()
+    {
+        return $this->belongsTo(User::class, 'reviewed_by');
     }
 }

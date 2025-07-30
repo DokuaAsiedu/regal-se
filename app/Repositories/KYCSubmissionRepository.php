@@ -25,7 +25,9 @@ class KYCSubmissionRepository extends BaseRepository
         'company_email',
         'customer_employment_start_date',
         'status_id',
-        'user_id'
+        'user_id',
+        'reviewed_by',
+        'rejection_reason',
     ];
 
     public function model()
