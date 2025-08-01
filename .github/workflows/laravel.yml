@@ -76,6 +76,7 @@ jobs:
         key: ${{ secrets.SERVER_SSH_KEY }}
         script: |
           whoami
+          cd ${{ secrets.REPO_DIR }}
           composer install
           chmod 775 -R storage bootstrap/cache
           php artisan config:clear && php artisan route:clear && php artisan view:clear
