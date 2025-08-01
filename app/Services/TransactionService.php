@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\TransactionRepository;
+use Illuminate\Support\Str;
 
 class TransactionService
 {
@@ -44,5 +45,14 @@ class TransactionService
     public function delete($ids)
     {
         $this->transactionRepository->delete($ids);
+    }
+
+    public function generateReference()
+    {
+        do {
+            $reference = Str::random();
+        } while ($this->transactionRepository->allQuery(['reference' => $reference])->exists());
+
+        return $reference;
     }
 }

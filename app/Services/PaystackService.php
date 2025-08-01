@@ -25,6 +25,7 @@ class PaystackService
 
         $data = array_merge($data, [
             'callback_url' => route('payment.successful'),
+            'reference' => $this->transactionService->generateReference(),
         ]);
 
         $response = Http::withToken($secret_key)

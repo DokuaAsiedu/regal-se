@@ -53,7 +53,7 @@ class PaymentService
         $this->paymentRepository->delete($ids);
     }
 
-    public function getPaymentLink(Payment $payment, string $customer_email, $reference = null)
+    public function getPaymentLink(Payment $payment, string $customer_email)
     {
         $amount = $payment->amount * 100;
         $currency = $payment->currency;
@@ -62,11 +62,11 @@ class PaymentService
             'amount' => $amount,
             'currency' => $currency,
         ];
-        if ($reference) $data['reference'] = $reference;
+
         $response = $this->paystackService->initializeTransaction($data, $payment);
 
         $payment_link = $response['data']['authorization_url'];
-        return $payment_link ?? 'sdfas';
+        return $payment_link;
     }
 
     public function getNextDuePayment(Model $payable)
