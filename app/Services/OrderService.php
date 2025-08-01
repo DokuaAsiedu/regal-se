@@ -257,6 +257,19 @@ class OrderService
         return $sub_total;
     }
 
+    public function getOrderInitialPayment(Order $order)
+    {
+        $order_items = $order->orderItems;
+        $value = 0;
+        foreach ($order_items as $elem) {
+            if ($elem->payment_plan == PaymentPlan::Installment) {
+                $value += $elem->down_payment_amount * $elem->quantity;
+            } else {
+                $value += $elem->unit_price * $elem->quantity;
+            }
+        }
+    }
+
     public function getInitialPayment(Order $order)
     {
         $payment = $order->payments()
