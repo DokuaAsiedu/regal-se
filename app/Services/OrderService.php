@@ -177,16 +177,18 @@ class OrderService
         $order->update($payload);
 
         // create payments
-        $this->createOrderPayments($order);
+        $first_payment = $this->createOrderPayments($order);
 
-        $this->sendOrderApprovedNotification($order);
+        $payment_link = $this->paymentService->getPaymentLink($first_payment, $order->customer_email);
+
+        $this->sendOrderApprovedNotification($order, $payment_link);
     }
 
-    public function sendOrderApprovedNotification(Order $order)
+    public function sendOrderApprovedNotification(Order $order, $payment_link)
     {
         // send notification to customer
         Notification::route('mail', $order->customer_email)
-            ->notify(new OrderApproved($order));
+            ->notify(new OrderApproved($order, $payment_link));
     }
 
     public function createOrderPayments(Order $order)
@@ -217,7 +219,7 @@ class OrderService
             'status_id' => $this->statusService->pending()->id,
             'due_date' => $first_due_date,
         ];
-        $this->paymentService->store($first_payment_payload);
+        $first_payment = $this->paymentService->store($first_payment_payload);
 
         if ($installment_amount > 0) {
             for ($i = 0; $i < $installment_months; $i++) {
@@ -233,6 +235,8 @@ class OrderService
                 $this->paymentService->store($payment_payload);
             }
         }
+
+        return $first_payment;
     }
 
     public function getSubTotal(Order $order)
@@ -253,18 +257,12 @@ class OrderService
         return $sub_total;
     }
 
-    public function getOrderInitialPayment(Order $order)
+    public function getInitialPayment(Order $order)
     {
-        $order_items = $order->orderItems;
-        $value = 0;
-        foreach ($order_items as $elem) {
-            if ($elem->payment_plan == PaymentPlan::Installment) {
-                $value += $elem->down_payment_amount * $elem->quantity;
-            } else {
-                $value += $elem->unit_price * $elem->quantity;
-            }
-        }
+        $payment = $order->payments()
+            ->orderBy('due_date')
+            ->first();
 
-        return $value;
+        return $payment;
     }
 }

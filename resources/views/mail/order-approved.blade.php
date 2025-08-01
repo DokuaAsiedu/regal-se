@@ -27,7 +27,7 @@ Your order **#{{ $order->code }}** has been approved. Please find your order sum
                 <td align="right">{{ $elem->quantity }}</td>
                 <td align="right">
                     <div>
-                        <flux:text>{{ formatCurrency($elem->unit_price, 2) }}</flux:text>
+                        <flux:text>{{ formatCurrency($elem->unit_price) }}</flux:text>
                         @if (isset($elem->down_payment_amount))
                             <flux:text style="font-size: 0.75rem;">{{ __('Down payment') }}: {{ formatCurrency($elem->down_payment_amount) }} ({{ $elem->down_payment_percentage }}%)</flux:text>
 
@@ -45,14 +45,26 @@ Your order **#{{ $order->code }}** has been approved. Please find your order sum
 <br/>
 
 <flux:text style="text-end"><b>{{ __('Total:') }}</b> {{ formatCurrency($sub_total) }}</flux:text>
-<flux:text style="text-end"><b>{{ __('Pay Now:') }}</b> {{ formatCurrency($initial_payment) }}</flux:text>
+<flux:text style="text-end"><b>{{ __('Pay Now:') }}</b> {{ $formatted_initial_payment_amount }}</flux:text>
 
+<br />
+<flux:text>{{ __('Please use this button to make payment:') }}</flux:text>
+
+<x-mail::button :url="$payment_link" color="primary">
+{{ $action_text }}
+</x-mail::button>
+
+{{ __('Thank you for choosing us!') }}
 <br/>
-Thank you for choosing us!
-<br/>
-Regards,
+{{ __('Regards,') }}
 <br/>
 {{ config('app.name') }}
+
+<x-slot:subcopy>
+{{ __("If you're having trouble clicking the \"$action_text\" button, copy and paste the following URL into your web browser:") }} <a :href="$payment_link" class="
+break-all" style="cursor: pointer">{{ $payment_link }}</a>
+</x-slot:subcopy>
+
 </x-mail::message>
 
 <!-- Very little is needed to make a happy life. - Marcus Aurelius -->

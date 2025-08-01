@@ -2,27 +2,25 @@
 
 namespace App\Services;
 
-use App\Exceptions\CustomException;
-use App\Models\Order;
-use App\Models\Status;
+use App\Models\Payment;
 use App\Repositories\PaymentRepository;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
 
 class PaymentService
 {
     protected $paymentRepository;
-    protected $cartService;
-    protected $roleService;
+    protected $paystackService;
 
     /**
      * Create a new class instance.
      */
-    public function __construct(PaymentRepository $paymentRepository, CartService $cartService, RoleService $roleService)
+    public function __construct(
+        PaymentRepository $paymentRepository,
+        PaystackService $paystackService,
+    )
     {
         $this->paymentRepository = $paymentRepository;
-        $this->cartService = $cartService;
-        $this->roleService = $roleService;
+        $this->paystackService = $paystackService;
     }
 
     public function find($id)
@@ -53,5 +51,29 @@ class PaymentService
     public function delete($ids)
     {
         $this->paymentRepository->delete($ids);
+    }
+
+    public function getPaymentLink(Payment $payment, string $customer_email, $reference = null)
+    {
+        $amount = $payment->amount * 100;
+        $currency = $payment->currency;
+        $data = [
+            'email' => $customer_email,
+            'amount' => $amount,
+            'currency' => $currency,
+        ];
+        if ($reference) $data['reference'] = $reference;
+        $response = $this->paystackService->initializeTransaction($data, $payment);
+
+        $payment_link = $response['data']['authorization_url'];
+        return $payment_link ?? 'sdfas';
+    }
+
+    public function getNextDuePayment(Model $payable)
+    {
+        return $payable->payments()
+            ->orderBy('due_date')
+            ->whereNull('paid_at')
+            ->first();
     }
 }
