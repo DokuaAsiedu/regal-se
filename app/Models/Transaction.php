@@ -3,24 +3,26 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
-class Payment extends Model
+class Transaction extends Model
 {
     use LogsActivity;
 
     protected $fillable = [
-        'payable_type',
-        'payable_id',
+        'payment_id',
         'amount',
         'currency',
-        'status_id',
-        'payment_channel',
+        'authorization_url',
+        'reference',
+        'gateway',
+        'status',
+        'channel',
         'transaction_id',
-        'due_date',
+        'payload',
         'paid_at',
+        'processed_at',
     ];
 
     public function getActivitylogOptions(): LogOptions
@@ -30,13 +32,8 @@ class Payment extends Model
         // Chain fluent methods for configuration options
     }
 
-    public function payable(): MorphTo
+    public function payment()
     {
-        return $this->morphTo();
-    }
-
-    public function transactions()
-    {
-        return $this->hasMany(Transaction::class);
+        return $this->belongsTo(Payment::class);
     }
 }

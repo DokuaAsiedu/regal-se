@@ -2,26 +2,29 @@
 
 namespace App\Repositories;
 
-use App\Models\Payment;
+use App\Models\Transaction;
 
-class PaymentRepository extends BaseRepository
+class TransactionRepository extends BaseRepository
 {
     private $fieldsSearchable = [
         'id',
-        'payable_type',
-        'payable_id',
+        'payment_id',
         'amount',
         'currency',
-        'status_id',
-        'payment_channel',
+        'authorization_url',
+        'reference',
+        'gateway',
+        'status',
+        'channel',
         'transaction_id',
-        'due_date',
+        'payload',
         'paid_at',
+        'processed_at',
     ];
 
     public function model()
     {
-        return Payment::class;
+        return Transaction::class;
     }
 
     public function getFieldsSearchable()
