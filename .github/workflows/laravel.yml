@@ -10,25 +10,40 @@ jobs:
   laravel-tests:
     runs-on: ubuntu-latest
     steps:
-    - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
       with:
         php-version: '8.3'
-    - uses: actions/checkout@v4
+
+    - name: Copy .env
+      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+    - name: Generate key
+      run: php artisan key:generate
+
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
     - name: Composer autoload
       run: composer dump-autoload
+
+    - name: Directory Permissions
+      run: chmod -R 775 storage bootstrap/cache
+
     - name: Optimize Laravel
       run: |
-          php artisan config:cache
-          php artisan route:cache
-          php artisan view:cache
-    - name: Directory Permissions
-      run: chmod -R 777 storage bootstrap/cache
+        php artisan config:cache
+        php artisan route:cache
+        php artisan view:cache
+
     - name: Set up Node
       uses: actions/setup-node@v4
       with:
         node-version: '24'
+
     - name: Install Node dependencies
       run: npm ci
 
@@ -38,23 +53,30 @@ jobs:
     - name: Deploy via FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./
-          server-dir: /regal-se/
-          exclude: |
-            **/.git*
-            **/node_modules/**
-            **/vendor/**
-            **/.github/**
-            .env.example
-    # - name: Create Database
-    #   run: |
-    #     mkdir -p database
-    #     touch database/database.sqlite
-    # - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
-    #   env:
-    #     DB_CONNECTION: sqlite
-    #     DB_DATABASE: database/database.sqlite
-    #   run: php artisan test
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./
+        server-dir: /regal-se/
+        exclude: |
+          **/.git*
+          **/vendor/**
+          **/node_modules/**
+          **/.github/**
+          .env
+          storage/**
+          bootstrap/cache/**
+
+    - name: Execute remote SSH commands using SSH key
+      uses: appleboy/ssh-action@v1
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        script: |
+          whoami
+          composer install
+          chmod 775 -R storage bootstrap/cache
+          php artisan config:clear && php artisan route:clear && php artisan view:clear
+          php artisan config:cache && php artisan route:cache && php artisan view:cache
+
