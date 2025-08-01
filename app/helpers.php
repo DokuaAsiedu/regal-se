@@ -32,7 +32,9 @@ function downPaymentPercentage()
     return storeSettings()->downPaymentPercentage();
 }
 
-function formatCurrency($amount)
+function formatCurrency($amount, $currency_code = null)
 {
-    return currency() . ' ' . $amount;
+    $currency = $currency_code ?? currency();
+
+    return $currency . ' ' . $amount;
 }
