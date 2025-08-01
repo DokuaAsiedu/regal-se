@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'paystack' => [
+        'secret_key' => env('PAYSTACK_SECRET_KEY', null),
+        'public_key' => env('PAYSTACK_PUBLIC_KEY', null),
+        'endpoints' => [
+            'initialize_transaction' => 'https://api.paystack.co/transaction/initialize',
+        ],
+    ],
+
 ];
