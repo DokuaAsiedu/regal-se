@@ -14,7 +14,7 @@
             </div>
 
             <div class="flex flex-col gap-2">
-                <label for="customer_email">{{ __('Email') }}</label>
+                <label for="customer_email">{{ __('Email') }} <x-required /></label>
                 <flux:input type="text" id="customer_email" wire:model="customer_email" />
                 <flux:error name="customer_email" />
             </div>

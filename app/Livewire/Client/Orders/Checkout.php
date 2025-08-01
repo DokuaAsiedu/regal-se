@@ -42,7 +42,7 @@ class Checkout extends Component
         'customer_phone' => 'required|string',
         'customer_phone_prefix' => 'required|string',
         'customer_phone_country_code' => 'required|string',
-        'customer_email' => 'nullable|email',
+        'customer_email' => 'required|email',
         'delivery_address' => 'required|string',
         'landmark' => 'required|string',
         'delivery_note' => 'nullable|string',
