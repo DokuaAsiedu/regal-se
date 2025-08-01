@@ -16,6 +16,7 @@
             </flux:navlist.group>
             <flux:navlist.item icon="users" :href="route('users.index')" :current="request()->routeIs('users.index')" wire:navigate>{{ __('Users') }}</flux:navlist.item>
             <flux:navlist.item icon="document-text" :href="route('kyc.index')" :current="request()->routeIs('kyc.index')" wire:navigate>{{ __('KYC Submissions') }}</flux:navlist.item>
+            <flux:navlist.item icon="banknotes" :href="route('payments.index')" :current="request()->routeIs('payments.index')" wire:navigate>{{ __('Payments') }}</flux:navlist.item>
         </flux:navlist.group>
     </flux:navlist>
 

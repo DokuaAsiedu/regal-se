@@ -39,4 +39,9 @@ class Payment extends Model
     {
         return $this->hasMany(Transaction::class);
     }
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class);
+    }
 }
