@@ -10,6 +10,7 @@ class PaymentService
 {
     protected $paymentRepository;
     protected $paystackService;
+    protected $transactionService;
 
     /**
      * Create a new class instance.
@@ -17,10 +18,12 @@ class PaymentService
     public function __construct(
         PaymentRepository $paymentRepository,
         PaystackService $paystackService,
+        TransactionService $transactionService,
     )
     {
         $this->paymentRepository = $paymentRepository;
         $this->paystackService = $paystackService;
+        $this->transactionService = $transactionService;
     }
 
     public function find($id)
@@ -63,9 +66,9 @@ class PaymentService
             'currency' => $currency,
         ];
 
-        $response = $this->paystackService->initializeTransaction($data, $payment);
+        $response = $this->transactionService->initializePaystackTransaction($data, $payment);
 
-        $payment_link = $response['data']['authorization_url'];
+        $payment_link = $response['authorization_url'];
         return $payment_link;
     }
 
