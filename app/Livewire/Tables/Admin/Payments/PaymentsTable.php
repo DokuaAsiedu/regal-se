@@ -80,7 +80,7 @@ final class PaymentsTable extends PowerGridComponent
                 ->searchable(),
 
             Column::make('Status', 'status_name'),
-            Column::make('Payment channel', 'transaction_id')
+            Column::make('Payment channel', 'payment_channel')
                 ->sortable()
                 ->searchable(),
 
