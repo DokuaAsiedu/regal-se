@@ -89,6 +89,42 @@ class StatusService
             ->first();
     }
 
+    public function success()
+    {
+        return $this->statusRepository->allQuery(['code' => 'success'])
+            ->first();
+    }
+
+    public function failed()
+    {
+        return $this->statusRepository->allQuery(['code' => 'failed'])
+            ->first();
+    }
+
+    public function abandoned()
+    {
+        return $this->statusRepository->allQuery(['code' => 'abandoned'])
+            ->first();
+    }
+
+    public function cancelled()
+    {
+        return $this->statusRepository->allQuery(['code' => 'cancelled'])
+            ->first();
+    }
+
+    public function invalid()
+    {
+        return $this->statusRepository->allQuery(['code' => 'invalid'])
+            ->first();
+    }
+
+    public function unknown()
+    {
+        return $this->statusRepository->allQuery(['code' => 'unknown'])
+            ->first();
+    }
+
     public function isActive($status_id)
     {
         return $status_id == $this->active()->id;
@@ -127,5 +163,35 @@ class StatusService
     public function isSuspended($status_id)
     {
         return $status_id == $this->suspended()->id;
+    }
+
+    public function isSuccessful($status_id)
+    {
+        return $status_id == $this->success()->id;
+    }
+
+    public function isFailure($status_id)
+    {
+        return $status_id == $this->failed()->id;
+    }
+
+    public function isAbandoned($status_id)
+    {
+        return $status_id == $this->abandoned()->id;
+    }
+
+    public function isCancelled($status_id)
+    {
+        return $status_id == $this->cancelled()->id;
+    }
+
+    public function isInvalid($status_id)
+    {
+        return $status_id == $this->invalid()->id;
+    }
+
+    public function isUnknown($status_id)
+    {
+        return $status_id == $this->unknown()->id;
     }
 }
