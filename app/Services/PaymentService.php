@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 class PaymentService
 {
     protected $paymentRepository;
-    protected $paystackService;
     protected $transactionService;
 
     /**
@@ -17,12 +16,10 @@ class PaymentService
      */
     public function __construct(
         PaymentRepository $paymentRepository,
-        PaystackService $paystackService,
         TransactionService $transactionService,
     )
     {
         $this->paymentRepository = $paymentRepository;
-        $this->paystackService = $paystackService;
         $this->transactionService = $transactionService;
     }
 

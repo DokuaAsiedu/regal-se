@@ -64,7 +64,7 @@ class TransactionService
     public function initializePaystackTransaction($data, Payment $payment)
     {
         $data = array_merge($data, [
-            'callback_url' => route('payment.successful'),
+            'callback_url' => route('transactions.paystack.verify'),
             'reference' => $this->generateReference(),
         ]);
 
@@ -83,5 +83,13 @@ class TransactionService
         $this->store($transaction_payload);
 
         return $response;
+    }
+
+    public function verifyPaystackTransaction($reference)
+    {
+        $response = $this->paystackService->verifyTransaction($reference);
+        $response_data = $response['data'];
+
+        return $response_data;
     }
 }

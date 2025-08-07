@@ -11,6 +11,7 @@ use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\KYCController as ClientKYCController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\PaymentController;
+use App\Http\Controllers\Client\TransactionController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([], function () {
@@ -18,7 +19,7 @@ Route::group([], function () {
     Route::get('cart', [OrderController::class, 'cart'])->name('cart');
     Route::get('checkout', [OrderController::class, 'checkout'])->name('checkout');
     Route::get('kyc', [ClientKYCController::class, 'index'])->name('client.kyc');
-    Route::get('payment/successful', [PaymentController::class, 'paymentSuccessful'])->name('payment.successful');
+    Route::get('transactions/paystack/verify', [TransactionController::class, 'verifyPaystackTransaction'])->name('transactions.paystack.verify');
 });
 
 Route::view('dashboard', 'admin.dashboard')

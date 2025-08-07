@@ -40,6 +40,7 @@ return [
         'public_key' => env('PAYSTACK_PUBLIC_KEY', null),
         'endpoints' => [
             'initialize_transaction' => 'https://api.paystack.co/transaction/initialize',
+            'verify_transaction' => 'https://api.paystack.co/transaction/verify/:reference',
         ],
     ],
 

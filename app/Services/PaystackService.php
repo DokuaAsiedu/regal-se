@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\CustomException;
 use Illuminate\Support\Facades\Http;
 
 class PaystackService
@@ -24,6 +25,10 @@ class PaystackService
             ->post($initialize_transaction_endpoint, $data)
             ->throw()
             ->json();
+
+        if (!$response['status']) {
+            throw new CustomException($response['message']);
+        }
 
         return $response['data'];
     }
