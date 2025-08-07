@@ -14,7 +14,7 @@ class TransactionRepository extends BaseRepository
         'authorization_url',
         'reference',
         'gateway',
-        'status',
+        'status_id',
         'channel',
         'transaction_id',
         'payload',

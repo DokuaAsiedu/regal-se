@@ -17,7 +17,7 @@ class Transaction extends Model
         'authorization_url',
         'reference',
         'gateway',
-        'status',
+        'status_id',
         'channel',
         'transaction_id',
         'payload',
@@ -35,5 +35,10 @@ class Transaction extends Model
     public function payment()
     {
         return $this->belongsTo(Payment::class);
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class);
     }
 }
