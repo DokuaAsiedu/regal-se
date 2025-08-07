@@ -24,4 +24,22 @@ class TransactionController extends Controller
 
         return view('client.transactions.paystack.verify', compact('reference'));
     }
+
+    public function webhook(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $this->transactionService->handlePaystackWebhook($request);
+            DB::commit();
+            return response()->json([
+                'message' => 'Webhook received',
+            ]);
+        } catch (Throwable $err) {
+            $default_message = 'Error processing webhook';
+            $message = $this->handle($err, $default_message)->message;
+            return response()->json([
+                'message' => $message,
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+    }
 }

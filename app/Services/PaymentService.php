@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Payment;
+use App\Models\Transaction;
 use App\Repositories\PaymentRepository;
 use Illuminate\Database\Eloquent\Model;
 
@@ -75,5 +76,15 @@ class PaymentService
             ->orderBy('due_date')
             ->whereNull('paid_at')
             ->first();
+    }
+
+    public function processPayment(Transaction $transaction)
+    {
+        $payment = $transaction->payment;
+        $payment->transaction_id = $transaction->id;
+        $payment->payment_channel = $transaction->channel;
+        $payment->paid_at = $transaction->paid_at;
+        $payment->status_id = $transaction->status_id;
+        $payment->save();
     }
 }

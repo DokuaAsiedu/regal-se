@@ -33,6 +33,23 @@ class PaystackService
         return $response['data'];
     }
 
+    public function verifyTransaction($reference)
+    {
+        $verify_transaction_endpoint = config('services.paystack.endpoints.verify_transaction');
+        $url = strtr($verify_transaction_endpoint, [
+            ':reference' => $reference,
+        ]);
+        $secret_key = config('services.paystack.secret_key');
+
+        $response = Http::withToken($secret_key)
+            ->withHeader('Content-Type', 'application/json')
+            ->get($url)
+            ->throw()
+            ->json();
+
+        if (!$response['status']) {
+            throw new CustomException($response['message']);
+        }
 
         return $response;
     }

@@ -44,4 +44,9 @@ class Payment extends Model
     {
         return $this->belongsTo(Status::class);
     }
+
+    public function successfulTransaction()
+    {
+        return $this->belongsTo(Transaction::class);
+    }
 }
