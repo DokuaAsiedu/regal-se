@@ -48,7 +48,7 @@ class Show extends Component
         } catch (Throwable $err) {
             $default_message = __('Error showing KYC');
             $message = $this->handle($err, $default_message)->message;
-            toastr()->error($message);
+            flash()->error($message);
         }
     }
 
@@ -78,11 +78,11 @@ class Show extends Component
             $this->kycService->approveKYC($this->kyc);
             DB::commit();
             $this->loadData();
-            toastr()->success(__('Successfully approved KYC'));
+            flash()->success(__('Successfully approved KYC'));
         } catch (Throwable $err) {
             $default_message = __('Error approving KYC');
             $message = $this->handle($err, $default_message)->message;
-            toastr()->error($message);
+            flash()->error($message);
         }
     }
 
@@ -94,14 +94,14 @@ class Show extends Component
             $this->kycService->rejectKYC($this->kyc, $reason);
             DB::commit();
             $message = __('KYC rejected');
-            toastr()->success($message);
+            flash()->success($message);
             $this->dispatch('closeModal');
             $this->loadData();
         } catch (Throwable $err) {
             DB::rollBack();
             $default_message = __('Error rejecting KYC');
             $message = $this->handle($err, $default_message)->message;
-            toastr()->error($message);
+            flash()->error($message);
         }
     }
 

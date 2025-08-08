@@ -62,7 +62,7 @@ class Checkout extends Component
             $this->loadData();
         } catch (Throwable $err) {
             $message = $this->handle($err)->message;
-            toastr()->error(__('Error mounting component') . ': '. $message);
+            flash()->error(__('Error mounting component') . ': '. $message);
         }
     }
 
@@ -112,13 +112,13 @@ class Checkout extends Component
             ];
             $this->orderService->placeOrder($payload);
             DB::commit();
-            toastr()->success(__('Your order has been placed!'));
+            flash()->success(__('Your order has been placed!'));
             redirect()->route('home');
         } catch (Throwable $err) {
             DB::rollBack();
             $default_message = __('Sorry something went wrong whiles placing your order. Please try again later');
             $message = $this->handle($err, $default_message)->message;
-            toastr()->error($message);
+            flash()->error($message);
         }
     }
 

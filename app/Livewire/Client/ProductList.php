@@ -34,7 +34,7 @@ class ProductList extends Component
             // $this->loadData();
         } catch (Throwable $err) {
             $message = $this->handle($err)->message;
-            toastr()->error(__('Error mounting component') . ': '. $message);
+            flash()->error(__('Error mounting component') . ': '. $message);
         }
     }
 
@@ -73,12 +73,12 @@ class ProductList extends Component
             DB::beginTransaction();
             $this->cartService->addToCart(product_id: $product->id, payment_plan: $payment_plan);
             DB::commit();
-            toastr()->success('Item added to cart');
+            flash()->success('Item added to cart');
         } catch (Throwable $err) {
             DB::rollBack();
             $default_message = __('Error adding item to cart');
             $message = $this->handle($err, $default_message)->message;
-            toastr()->error($message);
+            flash()->error($message);
         }
     }
 

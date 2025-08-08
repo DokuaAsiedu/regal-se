@@ -128,13 +128,13 @@ final class ProductTable extends PowerGridComponent
             $this->productService->delete([$id]);
             DB::commit();
             $message = 'Successfully deleted product';
-            toastr()->success($message);
+            flash()->success($message);
             $this->dispatch('refresh');
             $this->dispatch('closeModal');
         } catch (Throwable $err) {
             DB::rollBack();
             $message = $this->handle($err)->message;
-            toastr()->error($message);
+            flash()->error($message);
         }
     }
 

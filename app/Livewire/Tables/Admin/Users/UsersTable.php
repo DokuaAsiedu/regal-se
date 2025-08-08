@@ -129,13 +129,13 @@ final class UsersTable extends PowerGridComponent
             $this->userService->delete([$id]);
             DB::commit();
             $message = 'Successfully deleted user';
-            toastr()->success($message);
+            flash()->success($message);
             $this->dispatch('refresh');
             $this->dispatch('closeModal');
         } catch (Throwable $err) {
             DB::rollBack();
             $message = $this->handle($err)->message;
-            toastr()->error($message);
+            flash()->error($message);
         }
     }
 

@@ -39,7 +39,7 @@ class Edit extends Component
             $this->loadData();
         } catch (Throwable $err) {
             $message = $this->handle($err)->message;
-            toastr()->error(__('Error mounting component') . ': '. $message);
+            flash()->error(__('Error mounting component') . ': '. $message);
         }
     }
 
@@ -87,11 +87,11 @@ class Edit extends Component
                     ]);
             }
             DB::commit();
-            toastr()->success('Store settings successfully updated');
+            flash()->success('Store settings successfully updated');
         } catch (Throwable $err) {
             DB::rollBack();
             $message = $this->handle($err)->message;
-            toastr()->error($message);
+            flash()->error($message);
         }
     }
 

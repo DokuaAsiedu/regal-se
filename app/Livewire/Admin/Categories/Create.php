@@ -40,7 +40,7 @@ class Create extends Component
             $this->loadData($id);
         } catch (Throwable $err) {
             $message = $this->handle($err)->message;
-            toastr()->error(__('Error mounting component') . ': '. $message);
+            flash()->error(__('Error mounting component') . ': '. $message);
         }
     }
 
@@ -89,12 +89,12 @@ class Create extends Component
                 $this->categoryService->store($payload);
             }
             DB::commit();
-            toastr()->success($this->success_message);
+            flash()->success($this->success_message);
             return redirect()->route('categories.index');
         } catch (Throwable $err) {
             DB::rollBack();
             $message = $this->handle($err)->message;
-            toastr()->error($message);
+            flash()->error($message);
         }
     }
 

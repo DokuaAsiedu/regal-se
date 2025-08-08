@@ -111,13 +111,13 @@ final class CategoryTable extends PowerGridComponent
             $this->categoryService->delete([$id]);
             DB::commit();
             $message = 'Successfully deleted category';
-            toastr()->success($message);
+            flash()->success($message);
             $this->dispatch('refresh');
             $this->dispatch('closeModal');
         } catch (Throwable $err) {
             DB::rollBack();
             $message = $this->handle($err)->message;
-            toastr()->error($message);
+            flash()->error($message);
         }
     }
 

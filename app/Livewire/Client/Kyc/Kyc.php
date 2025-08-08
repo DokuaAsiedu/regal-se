@@ -137,7 +137,7 @@ class KYC extends Component
             DB::rollBack();
             $default_message = __('Error submitting KYC info. Please try again later');
             $message = $this->handle($err, $default_message)->message;
-            toastr()->error($message);
+            flash()->error($message);
         }
     }
 
@@ -149,7 +149,7 @@ class KYC extends Component
             DB::rollBack();
             $default_message = __('Error switching to edit mode');
             $this->handle($err, $default_message)->message;
-            toastr()->error($default_message);
+            flash()->error($default_message);
         }
     }
 

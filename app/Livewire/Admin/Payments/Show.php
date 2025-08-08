@@ -30,7 +30,7 @@ class Show extends Component
         } catch (Throwable $err) {
             $default_message = __('Error showing payment');
             $message = $this->handle($err, $default_message)->message;
-            toastr()->error($message);
+            flash()->error($message);
         }
     }
 

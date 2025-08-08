@@ -33,7 +33,7 @@ class Show extends Component
             $this->loadData();
         } catch (Throwable $err) {
             $message = $this->handle($err)->message;
-            toastr()->error(__('Error mounting component') . ': '. $message);
+            flash()->error(__('Error mounting component') . ': '. $message);
         }
     }
 
@@ -50,12 +50,12 @@ class Show extends Component
             $this->orderService->approve($this->order);
             DB::commit();
             $this->loadData();
-            toastr()->success(__('Successfully approved order'));
+            flash()->success(__('Successfully approved order'));
         } catch (Throwable $err) {
             DB::rollBack();
             $default_message = __('Error approving order');
             $message = $this->handle($err, $default_message)->message;
-            toastr()->error($message);
+            flash()->error($message);
         }
     }
 

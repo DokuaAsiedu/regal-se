@@ -36,7 +36,7 @@ class Cart extends Component
             $this->loadData();
         } catch (Throwable $err) {
             $message = $this->handle($err)->message;
-            toastr()->error(__('Error mounting component') . ': '. $message);
+            flash()->error(__('Error mounting component') . ': '. $message);
         }
     }
 
@@ -68,7 +68,7 @@ class Cart extends Component
             $this->loadData();
         } catch (Throwable $err) {
             $this->handle($err)->message;
-            toastr()->error(__('Error updating quantity'));
+            flash()->error(__('Error updating quantity'));
         }
     }
 
@@ -82,7 +82,7 @@ class Cart extends Component
             $this->loadData();
         } catch (Throwable $err) {
             $this->handle($err)->message;
-            toastr()->error(__('Error updating quantity'));
+            flash()->error(__('Error updating quantity'));
         }
     }
 
@@ -95,7 +95,7 @@ class Cart extends Component
             $this->loadData();
         } catch (Throwable $err) {
             $this->handle($err)->message;
-            toastr()->error(__('Error updating quantity'));
+            flash()->error(__('Error updating quantity'));
         }
     }
 
@@ -106,7 +106,7 @@ class Cart extends Component
             $this->loadData();
         } catch (Throwable $err) {
             $this->handle($err)->message;
-            toastr()->error(__('Error updating quantity'));
+            flash()->error(__('Error updating quantity'));
         }
     }
 
