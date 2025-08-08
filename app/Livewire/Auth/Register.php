@@ -48,13 +48,13 @@ class Register extends Component
         $validated['password'] = Hash::make($validated['password']);
 
         $status_id = Status::where('code', 'active')->first()->id ?? null;
-        $admin_role_id = $this->roleService
-            ->adminRole()
+        $customer_rol_id = $this->roleService
+            ->customerRole()
             ->id ?? null;
 
         $input = array_merge($validated, [
             'status_id' => $status_id,
-            'role_id' => $admin_role_id,
+            'role_id' => $customer_rol_id,
         ]);
 
         event(new Registered(($user = User::create($input))));
