@@ -105,6 +105,19 @@ class CartService
 
     public function addToCart($product_id, $quantity = 1, $payment_plan = PaymentPlan::Once->value)
     {
+        if ($payment_plan == PaymentPlan::Installment->value) {
+            if (Auth::check()) {
+                $user = Auth::user();
+                if (!$user->approvedKyc()) {
+                    redirect()->route('client.kyc');
+                    throw new CustomException('Please submit your KYC information and wait for approval to access this payment plan');
+                }
+            } else {
+                redirect()->route('client.kyc');
+                throw new CustomException('Please submit your KYC information to access this payment plan or login if your KYC has already been approved');
+            }
+        }
+
         $cart_item = $this->getCartItem($product_id);
 
         if (!$cart_item) {

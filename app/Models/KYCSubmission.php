@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Status as StatusEnum;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
@@ -55,5 +56,12 @@ class KYCSubmission extends Model
     public function reviewedBy()
     {
         return $this->belongsTo(User::class, 'reviewed_by');
+    }
+
+    public function scopeApproved($query)
+    {
+        return $query->whereHas('status', function ($query) {
+            $query->where('code', StatusEnum::approved->value);
+        });
     }
 }

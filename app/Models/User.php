@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Enums\Status;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -103,5 +105,17 @@ class User extends Authenticatable
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function kycSubmissions()
+    {
+        return $this->hasMany(KYCSubmission::class);
+    }
+
+    public function approvedKyc()
+    {
+        return $this->kycSubmissions()
+            ->approved()
+            ->first();
     }
 }

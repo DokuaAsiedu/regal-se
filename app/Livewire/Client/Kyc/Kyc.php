@@ -79,7 +79,7 @@ class KYC extends Component
             $this->loadData();
         } catch (Throwable $err) {
             $this->handle($err)->message;
-            flash()->error(__('Error loading KYC Form'));
+            // flash()->error(__('Error loading KYC Form'));
         }
     }
 

@@ -76,8 +76,9 @@ class ProductList extends Component
             toastr()->success('Item added to cart');
         } catch (Throwable $err) {
             DB::rollBack();
-            $this->handle($err);
-            toastr()->error(__('Error adding item to cart'));
+            $default_message = __('Error adding item to cart');
+            $message = $this->handle($err, $default_message)->message;
+            toastr()->error($message);
         }
     }
 
