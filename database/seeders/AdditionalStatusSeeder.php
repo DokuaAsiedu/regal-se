@@ -23,8 +23,8 @@ class AdditionalStatusSeeder extends Seeder
                 'name' => 'Failed',
             ],
             [
-                'code' => 'Abandoned',
-                'name' => 'abandoned',
+                'code' => 'abandoned',
+                'name' => 'Abandoned',
             ],
             [
                 'code' => 'cancelled',
