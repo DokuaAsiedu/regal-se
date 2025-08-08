@@ -42,7 +42,11 @@
                 <flux:menu.separator />
 
                 <flux:menu.radio.group>
-                    <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.item>
+                    @role('admin')
+                        <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.item>
+                    @else
+                        <flux:menu.item :href="route('client.settings.profile')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.item>
+                    @endrole
                 </flux:menu.radio.group>
 
                 <flux:menu.separator />

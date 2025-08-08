@@ -12,6 +12,7 @@ use App\Http\Controllers\Client\KYCController as ClientKYCController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\PaymentController;
 use App\Http\Controllers\Client\TransactionController;
+use App\Http\Controllers\Client\UserController as ClientUserController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([], function () {
@@ -20,6 +21,9 @@ Route::group([], function () {
     Route::get('checkout', [OrderController::class, 'checkout'])->name('checkout');
     Route::get('kyc', [ClientKYCController::class, 'index'])->name('client.kyc');
     Route::get('transactions/paystack/verify', [TransactionController::class, 'verifyPaystackTransaction'])->name('transactions.paystack.verify');
+    Route::get('settings/profile', [ClientUserController::class, 'editProfile'])->name('client.settings.profile');
+    Route::get('settings/password', [ClientUserController::class, 'changePassword'])->name('client.settings.password');
+    Route::get('settings/appearance', [ClientUserController::class, 'changeAppearance'])->name('client.settings.appearance');
 });
 
 Route::view('dashboard', 'admin.dashboard')
