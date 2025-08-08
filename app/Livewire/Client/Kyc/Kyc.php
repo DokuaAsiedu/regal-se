@@ -15,25 +15,25 @@ class KYC extends Component
     use HandlesErrorMessage;
 
     public $header;
-    public $customer_name = 'Test Customer';
-    public $customer_phone_prefix = '+233';
-    public $customer_phone = '261222644';
-    public $customer_phone_country_code = 'gh';
-    public $customer_address = 'Somewhere';
-    public $customer_ghana_card_number = 'GHA-0000000000-1';
-    public $customer_date_of_birth = '2010-12-12';
-    public $customer_email = 'testcustomer@email.com';
-    public $password = '123456789';
-    public $password_confirmation = '123456789';
+    public $customer_name;
+    public $customer_phone_prefix;
+    public $customer_phone;
+    public $customer_phone_country_code;
+    public $customer_address;
+    public $customer_ghana_card_number;
+    public $customer_date_of_birth;
+    public $customer_email;
+    public $password;
+    public $password_confirmation;
 
-    public $company_name = 'Some Company';
-    public $company_phone_prefix = '+233';
-    public $company_phone = '261222644';
-    public $company_phone_country_code = 'gh';
-    public $customer_current_position = 'Some position';
-    public $company_address = 'Somewhere';
-    public $company_email = 'companyemail@email.com';
-    public $customer_employment_start_date = '2025-07-21';
+    public $company_name;
+    public $company_phone_prefix;
+    public $company_phone;
+    public $company_phone_country_code;
+    public $customer_current_position;
+    public $company_address;
+    public $company_email;
+    public $customer_employment_start_date;
 
     public $kyc_submission;
     public $edit_mode;
