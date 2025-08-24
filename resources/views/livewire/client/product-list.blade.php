@@ -32,7 +32,7 @@
         @empty
             <div class="md:col-span-2 lg:col-span-3 flex flex-col items-center gap-4">
                 <div class="w-1/2 md:w-1/3 lg:w-1/6">
-                    <img src="{{ Vite::asset('resources/assets/images/empty-box.png') }}" alt="empty box" class="w-full aspect-auto" />
+                    <img src="{{ asset('images/empty-box.png') }}" alt="empty box" class="w-full aspect-auto" />
                 </div>
                 <flux:heading level="1" size="lg" class="text-center">{{ __('Oops! Nothing here yet. Please check back soon') }}</flux:heading>
             </div>
