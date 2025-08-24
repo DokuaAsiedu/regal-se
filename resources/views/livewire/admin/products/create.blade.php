@@ -49,6 +49,30 @@
             <flux:error name="status" />
         </div>
 
+        <div class="flex flex-col gap-2">
+            <label for="available-categories">{{ __('Available Categories') }}</label>
+            <flux:select id="available-categories" wire:model="selected_category_id" wire:change="addCategory">
+                <flux:select.option value="" disabled>{{ __('Select a category') }}</flux:select.option>
+                @foreach ($available_categories as $item)
+                    <flux:select.option value="{{ $item['id'] }}">{{ $item['name'] }}</flux:select.option>
+                @endforeach
+            </flux:select>
+        </div>
+
+        <div class="flex flex-col gap-6">
+            <flux:heading>{{ __('Categories') }}</flux:heading>
+            <div class="flex gap-4">
+                @forelse($product_categories as $item)
+                    <flux:badge variant="pill" color="emerald" class="flex items-center gap-2">
+                        <span>{{ $item['name'] }}</span>
+                        <flux:icon.x-circle class="cursor-pointer text-red-500" wire:click="removeCategory({{ $item['id'] }})" />
+                    </flux:badge>
+                @empty
+                    <flux:badge>{{ ('No categories assigned') }}</flux:badge>
+                @endforelse
+            </div>
+        </div>
+
         <x-button :name="__('Save')" type="submit" class="lg:col-span-2" />
     </form>
 </div>

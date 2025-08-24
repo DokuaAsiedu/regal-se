@@ -39,7 +39,14 @@ class ProductService
 
         $this->checkIfNameExists($input['name']);
 
-        return $this->productRepository->create($input);
+        $product = $this->productRepository->create($input);
+
+        if (isset($input['categories'])) {
+            $category_ids = array_map((fn ($item) => $item['id']), $input['categories']);
+            $product->categories()->attach($category_ids);
+        }
+
+        return $product;
     }
 
     public function update($id, $input)
@@ -52,7 +59,14 @@ class ProductService
 
         $this->checkIfNameExists($input['name'], $id);
 
-        return $this->productRepository->update($input, $id);
+        $product = $this->productRepository->update($input, $id);
+
+        if (isset($input['categories'])) {
+            $category_ids = array_map((fn ($item) => $item['id']), $input['categories']);
+            $product->categories()->sync($category_ids);
+        }
+
+        return $product;
     }
 
     public function delete($ids)

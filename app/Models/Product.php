@@ -48,4 +48,10 @@ class Product extends Model
     {
         return $query->where('quantity', '>', '0');
     }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'product_categories')
+            ->withTimestamps();
+    }
 }

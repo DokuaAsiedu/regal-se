@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Products;
 
+use App\Services\CategoryService;
 use App\Services\ProductService;
 use App\Traits\HandlesErrorMessage;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +21,9 @@ class Create extends Component
     public $quantity;
     public $description;
     public $status = "";
+    public $selected_category_id = '';
+    public $product_categories = [];
+    public $available_categories = [];
 
     public $id;
     public $product;
@@ -29,6 +33,7 @@ class Create extends Component
     public $error_message;
 
     protected $productService;
+    protected $categoryService;
 
     protected $rules = [
         'name' => 'required|string',
@@ -50,9 +55,10 @@ class Create extends Component
         }
     }
 
-    public function boot(ProductService $productService)
+    public function boot(ProductService $productService, CategoryService $categoryService)
     {
         $this->productService = $productService;
+        $this->categoryService = $categoryService;
     }
 
     #[Computed]
@@ -79,6 +85,74 @@ class Create extends Component
             $this->header = __('Create New Product');
             $this->success_message = __('Product successfully created');
         }
+
+        $this->product_categories = $this->getProductCategories();
+        $this->available_categories = $this->getAvailableCategories();
+    }
+
+    public function getProductCategories()
+    {
+        $product_categories = isset($this->id) ? $this->product
+            ->categories()
+            ->get()
+            ->map(fn ($item) => [
+                    'id' => $item->id,
+                    'name' => $item->name,
+                ]
+            )
+            ->all() : [];
+
+        return $product_categories;
+    }
+
+    public function getAvailableCategories()
+    {
+        $available_categories = $this->categoryService
+            ->allQuery()
+            ->active()
+            ->get()
+            ->filter(function ($item) {
+                $product_categories = collect($this->product_categories);
+                return !$product_categories->contains('id', $item['id']);
+            })
+            ->map(fn ($item) => [
+                'id' => $item->id,
+                'name' => $item->name,
+            ])
+            ->all();
+
+        return $available_categories;
+    }
+
+    public function addCategory()
+    {
+        try {
+            $available_categories = collect($this->available_categories);
+            $category = $available_categories
+                ->where('id', $this->selected_category_id)
+                ->first();
+            // dd($category, $this->product_categories);
+            $this->product_categories[] = $category;
+            $this->selected_category_id = '';
+            $this->available_categories = $this->getAvailableCategories();
+        } catch (Throwable $err) {
+            $default_message = 'Error adding category';
+            $message = $this->handle($err, $default_message)->message;
+            flash()->error($message);
+        }
+    }
+
+    public function removeCategory($category_id)
+    {
+        try {
+            $product_categories = collect($this->product_categories);
+            $this->product_categories = $product_categories->filter(fn ($item) => $item['id'] != $category_id)->all();
+            $this->available_categories = $this->getAvailableCategories();
+        } catch (Throwable $err) {
+            $default_message = 'Error adding category';
+            $message = $this->handle($err, $default_message)->message;
+            flash()->error($message);
+        }
     }
 
     public function save()
@@ -94,6 +168,7 @@ class Create extends Component
                 'quantity' => $this->quantity,
                 'description' => $this->description,
                 'status_id' => $this->status,
+                'categories' => $this->product_categories,
             ];
             if (isset($this->id)) {
                 $this->productService->update($this->id, $payload);
