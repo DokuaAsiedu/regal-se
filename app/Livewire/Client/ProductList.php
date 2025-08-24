@@ -4,11 +4,13 @@ namespace App\Livewire\Client;
 
 use App\Enums\PaymentPlan;
 use App\Services\CartService;
+use App\Services\CategoryService;
 use App\Services\ProductService;
 use App\Services\StoreSettingsService;
 use App\Traits\HandlesErrorMessage;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Throwable;
@@ -17,15 +19,20 @@ class ProductList extends Component
 {
     use WithPagination, HandlesErrorMessage;
 
+    #[Url]
+    public $category_code = '';
+
     protected $productService;
     protected $storeSettingsService;
     protected $cartService;
+    protected $categoryService;
 
-    public function boot(ProductService $productService, StoreSettingsService $storeSettingsService, CartService $cartService)
+    public function boot(ProductService $productService, StoreSettingsService $storeSettingsService, CartService $cartService, CategoryService $categoryService)
     {
         $this->productService = $productService;
         $this->storeSettingsService = $storeSettingsService;
         $this->cartService = $cartService;
+        $this->categoryService = $categoryService;
     }
 
     public function mount()
@@ -37,12 +44,6 @@ class ProductList extends Component
             flash()->error(__('Error mounting component') . ': '. $message);
         }
     }
-
-    // public function loadData()
-    // {
-    //     $this->products = $this->productService->products()->paginate(1);
-    //     // dd($this->products);
-    // }
 
     #[Computed]
     public function currency()
@@ -84,7 +85,17 @@ class ProductList extends Component
 
     public function render()
     {
-        $products = $this->productService->allQuery()->active()->quantityAvailable()->paginate(20);
+        if (isset($this->category_code) && !empty($this->category_code)) {
+            $products = $this->categoryService
+                ->allQuery(['code' => $this->category_code])
+                ->first()
+                ->products()
+                ->active()
+                ->quantityAvailable()
+                ->paginate(20);
+        } else {
+            $products = $this->productService->allQuery()->active()->quantityAvailable()->paginate(20);
+        }
 
         return view('livewire.client.product-list', [
             'products' => $products,

@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\View\Composers\CategoryComposer;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,5 +29,7 @@ class AppServiceProvider extends ServiceProvider
         Blade::directive('endrole', function () {
             return "<?php endif; ?>";
         });
+
+        View::composer('components.layouts.app.header', CategoryComposer::class);
     }
 }
