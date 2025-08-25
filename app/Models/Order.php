@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\Status as StatusEnum;
+use App\Traits\HasStatusScopes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -9,7 +11,7 @@ use Spatie\Activitylog\LogOptions;
 
 class Order extends Model
 {
-    use LogsActivity;
+    use LogsActivity, HasStatusScopes;
 
     protected $fillable = [
         'code',

@@ -1,18 +1,46 @@
 <x-layouts.admin :title="__('Dashboard')">
-    <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
-        <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-            <div class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-                <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
-            </div>
-            <div class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-                <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
-            </div>
-            <div class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-                <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
-            </div>
+    <div class="h-full lg:max-h-screen flex flex-col gap-4">
+        <div class="grid auto-rows-min gap-4 sm:grid-cols-2 md:grid-cols-3">
+            @foreach ($quick_stats as $elem)
+                <div class="p-6 grid border-zinc-200 border-1 rounded-md shadow-lg">
+                    <div class="flex flex-col gap-2">
+                        <flux:text size="sm">{{ $elem['title']['sub'] }}</flux:text>
+                        <h1 class="text-xl">{{ $elem['title']['main'] }}</h1>
+                        <flux:text size="sm">
+                            <span>{{ $elem['sub']['main'] }} </span>
+                            <span>{{ $elem['sub']['sub'] }}</span>
+                        </flux:text>
+                    </div>
+                </div>
+            @endforeach
         </div>
-        <div class="relative h-full flex-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-            <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
+        <div class="grow grid lg:grid-cols-3 gap-4 overflow-hidden">
+            <div class="h-full max-lg:max-h-screen flex flex-col border-1 border-zinc-200 rounded-md shadow-lg overflow-hidden">
+                <div class="p-4 border-b-2 border-b-zinc-200">
+                    <flux:heading level="2" size="lg">{{ __('Orders today') }}</flux:heading>
+                </div>
+                <div class="grow overflow-auto">
+                    @forelse ($orders_today as $order)
+                        <div class="p-4 flex gap-2 border-b-2 border-b-zinc-200">
+                            <flux:text>{{ $loop->iteration . '.' }}</flux:text>
+                            <div class="grow flex flex-col gap-2">
+                                <flux:heading level="3" size="base">{{ $order->code }}</flux:heading>
+                                <div class="flex flex-wrap gap-2">
+                                    <x-status :status="$order->status" />
+                                    <flux:badge color="purple">{{ $order->orderItems->count() . ' ' . Str::plural(__('item'), $order->orderItems->count()) }}</flux:badge>
+                                </div>
+                            </div>
+                            <div class="flex flex-col justify-center">
+                                <flux:button icon="eye" variant="filled" :href="route('orders.show', ['order' => $order->id])">{{ __('View') }}</flux:button>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="p-4 text-center">
+                            {{ __('No orders today...') }}
+                        </div>
+                    @endforelse
+                </div>
+            </div>
         </div>
     </div>
 </x-layouts.admin>

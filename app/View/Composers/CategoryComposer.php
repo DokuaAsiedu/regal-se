@@ -36,7 +36,11 @@ class CategoryComposer
                 ];
             });
         $min_category_number = 3;
-        $view->with('categories', $categories);
-        $view->with('min_category_number', $min_category_number);
+
+        $data = [
+            'categories' => $categories,
+            'min_category_number' => $min_category_number,
+        ];
+        $view->with($data);
     }
 }

@@ -49,4 +49,10 @@ class Payment extends Model
     {
         return $this->belongsTo(Transaction::class);
     }
+
+    public function scopeOverdue()
+    {
+        return $this->where('due_date', '<', today())
+            ->where('paid_at', null);
+    }
 }

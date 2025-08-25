@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\View\Composers\AdminDashboardComposer;
 use App\View\Composers\CategoryComposer;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
@@ -31,5 +32,6 @@ class AppServiceProvider extends ServiceProvider
         });
 
         View::composer('components.layouts.app.header', CategoryComposer::class);
+        View::composer('admin.dashboard', AdminDashboardComposer::class);
     }
 }
