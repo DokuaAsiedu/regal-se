@@ -101,8 +101,16 @@ class AdminDashboardComposer
             ->groupBy('date')
             ->orderBy('date')
             ->get();
-        $start_date = $data_over_given_period->min(fn ($elem) => Carbon::parse($elem['date']));
-        $end_date = $data_over_given_period->max(fn ($elem) => Carbon::parse($elem['date']));
+
+        // If no data, just return an array with 0 totals for each day in the period
+        if ($data_over_given_period->isEmpty()) {
+            $start_date = Carbon::now()->subDays($period)->startOfDay();
+            $end_date   = Carbon::now()->endOfDay();
+        } else {
+            $start_date = $data_over_given_period->min(fn ($elem) => Carbon::parse($elem['date']));
+            $end_date   = $data_over_given_period->max(fn ($elem) => Carbon::parse($elem['date']));
+        }
+
         $interval = DateInterval::createFromDateString('1 day');
         $period = new DatePeriod($start_date, $interval, $end_date->copy()->addDay());
 
