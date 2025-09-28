@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\StoreSettingsController;
+use App\Http\Controllers\Admin\TransactionsController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\KYCController as ClientKYCController;
@@ -39,6 +40,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::resource('kyc', KYCController::class);
     Route::get('store-settings', [StoreSettingsController::class, 'edit'])->name('store-settings.edit');
     Route::resource('payments', AdminPaymentController::class);
+    Route::resource('transactions', TransactionsController::class);
     Route::redirect('settings', 'settings/profile');
 
     Route::get('settings/profile', [UserController::class, 'editProfile'])->name('settings.profile');
