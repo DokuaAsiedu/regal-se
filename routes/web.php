@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CompaniesController;
 use App\Http\Controllers\Admin\KYCController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
@@ -41,6 +42,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('store-settings', [StoreSettingsController::class, 'edit'])->name('store-settings.edit');
     Route::resource('payments', AdminPaymentController::class);
     Route::resource('transactions', TransactionsController::class);
+    Route::resource('companies', CompaniesController::class);
     Route::redirect('settings', 'settings/profile');
 
     Route::get('settings/profile', [UserController::class, 'editProfile'])->name('settings.profile');

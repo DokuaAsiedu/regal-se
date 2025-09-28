@@ -18,6 +18,7 @@
             <flux:navlist.item icon="document-text" :href="route('kyc.index')" :current="request()->routeIs('kyc.index')" wire:navigate>{{ __('KYC Submissions') }}</flux:navlist.item>
             <flux:navlist.item icon="banknotes" :href="route('payments.index')" :current="request()->routeIs('payments.index')" wire:navigate>{{ __('Payments') }}</flux:navlist.item>
             <flux:navlist.item icon="arrows-right-left" :href="route('transactions.index')" :current="request()->routeIs('transactions.index')" wire:navigate>{{ __('Transactions') }}</flux:navlist.item>
+            <flux:navlist.item icon="home-modern" :href="route('companies.index')" :current="request()->routeIs('companies.index')" wire:navigate>{{ __('Companies') }}</flux:navlist.item>
         </flux:navlist.group>
     </flux:navlist>
 
