@@ -32,6 +32,12 @@
             <flux:error name="down_payment_percentage" />
         </div>
 
+        <div class="flex flex-col gap-2">
+            <label for="auto_approve_kyc">{{ __('Automatically Approve KYCs?') }} <x-required /></label>
+            <flux:switch id="auto_approve_kyc" wire:model="auto_approve_kyc" />
+            <flux:error name="auto_approve_kyc" />
+        </div>
+
         <x-button :name="__('Save')" type="submit" class="lg:col-span-2" />
     </form>
 </div>

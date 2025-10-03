@@ -34,10 +34,15 @@ class StoreSettingsSeeder extends Seeder
                 'name' => 'Repayment Months',
                 'value' => 4,
             ],
+            [
+                'code' => 'auto_approve_kyc',
+                'name' => 'Auto Approve KYC',
+                'value' => true,
+            ],
         ];
 
         foreach ($data as $item) {
-            StoreSettings::create($item);
+            StoreSettings::updateOrCreate(['code' => $item['code']], $item);
         }
     }
 }

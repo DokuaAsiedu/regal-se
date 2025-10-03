@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\StoreSettings;
 
+use App\Enums\StoreSettings;
 use App\Services\StoreSettingsService;
 use App\Traits\HandlesErrorMessage;
 use Illuminate\Support\Facades\DB;
@@ -17,6 +18,7 @@ class Edit extends Component
     public $currency_symbol;
     public $repayment_months;
     public $down_payment_percentage;
+    public $auto_approve_kyc;
 
     protected $storeSettingsService;
 
@@ -26,6 +28,7 @@ class Edit extends Component
         'currency_symbol' => 'required|string|min:1',
         'repayment_months' => 'required|integer|min:1',
         'down_payment_percentage' => 'required|numeric|min:1|max:99',
+        'auto_approve_kyc' => 'required|boolean',
     ];
 
     public function boot(StoreSettingsService $storeSettingsService)
@@ -65,6 +68,10 @@ class Edit extends Component
             ->allQuery(['code' => 'down_payment_percentage'])
             ->first()
             ->value;
+        $this->auto_approve_kyc = (bool) ($this->storeSettingsService
+            ->allQuery(['code' => StoreSettings::auto_approve_kyc->value])
+            ->first()
+            ->value);
     }
 
     public function save()
@@ -78,6 +85,7 @@ class Edit extends Component
                 'currency_symbol' => $this->currency_symbol,
                 'repayment_months' => $this->repayment_months,
                 'down_payment_percentage' => $this->down_payment_percentage,
+                'auto_approve_kyc' => $this->auto_approve_kyc,
             ];
             foreach ($updates as $code => $value) {
                 $this->storeSettingsService
