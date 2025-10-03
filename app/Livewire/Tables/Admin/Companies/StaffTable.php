@@ -4,6 +4,7 @@ namespace App\Livewire\Tables\Admin\Companies;
 
 use App\Models\CompanyStaff;
 use App\Services\CompanyStaffService;
+use App\Traits\HandlesErrorMessage;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +20,8 @@ use Throwable;
 
 final class StaffTable extends PowerGridComponent
 {
+    use HandlesErrorMessage;
+
     public string $tableName = 'staff-bygid3-table';
 
     protected $listeners = ['companyUpdated', 'refresh' => '$refresh'];
@@ -116,13 +119,13 @@ final class StaffTable extends PowerGridComponent
     }
 
     #[On('delete-staff')]
-    public function deleteCategory($id)
+    public function deleteStaff($id)
     {
         try {
             DB::beginTransaction();
-            $this->companyService->delete([$id]);
+            $this->companyStaffService->delete([$id]);
             DB::commit();
-            $message = 'Successfully deleted company';
+            $message = 'Successfully deleted employee';
             flash()->success($message);
             $this->dispatch('refresh');
             $this->dispatch('closeModal');
