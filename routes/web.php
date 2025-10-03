@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CompaniesController;
+use App\Http\Controllers\Admin\CompanyStaffController;
 use App\Http\Controllers\Admin\KYCController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
@@ -43,6 +44,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::resource('payments', AdminPaymentController::class);
     Route::resource('transactions', TransactionsController::class);
     Route::resource('companies', CompaniesController::class);
+    Route::get('company-staff', [CompanyStaffController::class, 'index'])
+        ->name('company-staff.index');
     Route::redirect('settings', 'settings/profile');
 
     Route::get('settings/profile', [UserController::class, 'editProfile'])->name('settings.profile');
