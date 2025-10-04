@@ -79,7 +79,7 @@ class ProductList extends Component
             DB::rollBack();
             $default_message = __('Error adding item to cart');
             $message = $this->handle($err, $default_message)->message;
-            flash()->error($message);
+            flash()->info($message);
         }
     }
 
