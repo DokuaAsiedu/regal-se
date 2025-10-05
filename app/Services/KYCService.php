@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Events\KYCApproved;
+use App\Events\KYCRejected;
 use App\Events\KYCSubmitted;
 use App\Exceptions\CustomException;
 use App\Repositories\KYCRepository;
@@ -200,12 +201,6 @@ class KYCService
         $kyc->rejection_reason = $rejection_reason;
         $kyc->save();
 
-        $this->sendKYCRejectedNotification($kyc);
-    }
-
-    public function sendKYCRejectedNotification(KYC $kyc)
-    {
-        // notify customer
-        $kyc->user->notify(new KYCRejected($kyc));
+        KYCRejected::dispatch($kyc);
     }
 }
