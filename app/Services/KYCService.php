@@ -3,16 +3,15 @@
 namespace App\Services;
 
 use App\Enums\Roles;
+use App\Events\KYCSubmitted;
 use App\Exceptions\CustomException;
 use App\Models\KYC;
 use App\Notifications\KYCApproved;
 use App\Notifications\KYCRejected;
-use App\Notifications\KYCSubmitted;
 use App\Repositories\KYCRepository;
 use App\Services\StatusService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Notification;
 
 class KYCService
 {
@@ -170,17 +169,9 @@ class KYCService
         ];
         $kyc->update($kyc_payload);
 
-        $this->sendKYCSubmittedNotification($kyc);
-    }
-
-    public function sendKYCSubmittedNotification(KYC $kyc)
-    {
-        // notify customer
-        $kyc->user->notify(new KYCSubmitted($kyc));
-
-        // notify admins
-        $admins = $this->userService->admins()->get();
-        Notification::send($admins, new KYCSubmitted($kyc, Roles::Admin));
+        if (!$auto_approve_enabled) {
+            KYCSubmitted::dispatch($kyc);
+        }
     }
 
     public function approveKYC($kyc)

@@ -4,18 +4,16 @@ namespace App\Notifications;
 
 use App\Enums\Roles;
 use App\Models\KYC;
-use App\Services\KYCService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class KYCSubmitted extends Notification
+class KYCSubmitted extends Notification implements ShouldQueue
 {
     use Queueable;
 
     public $kyc;
-    public $kycService;
     public $recipient_type;
     public $title = 'KYC Submitted';
     public $url;
@@ -27,7 +25,6 @@ class KYCSubmitted extends Notification
     public function __construct(KYC $kyc, $recipient_type = Roles::Customer)
     {
         $this->kyc = $kyc;
-        $this->kycService = app(KYCService::class);
         $this->recipient_type = $recipient_type;
         $this->url = $this->recipient_type == Roles::Customer ? route('client.kyc') : route('kyc.show', ['kyc' => $this->kyc->id]);
     }
