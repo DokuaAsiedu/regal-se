@@ -75,4 +75,11 @@ class StoreSettingsService
             ->first()
             ->value;
     }
+
+    public function autoApproveKyc()
+    {
+        return (bool) $this->allQuery(['code' => 'auto_approve_kyc'])
+            ->first()
+            ->value;
+    }
 }

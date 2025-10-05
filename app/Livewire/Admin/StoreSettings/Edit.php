@@ -68,10 +68,8 @@ class Edit extends Component
             ->allQuery(['code' => 'down_payment_percentage'])
             ->first()
             ->value;
-        $this->auto_approve_kyc = (bool) ($this->storeSettingsService
-            ->allQuery(['code' => StoreSettings::auto_approve_kyc->value])
-            ->first()
-            ->value);
+        $this->auto_approve_kyc = $this->storeSettingsService
+            ->autoApproveKyc();
     }
 
     public function save()
