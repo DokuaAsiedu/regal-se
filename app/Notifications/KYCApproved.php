@@ -10,12 +10,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class KYCApproved extends Notification
+class KYCApproved extends Notification implements ShouldQueue
 {
     use Queueable;
 
     public $kyc;
-    public $kycService;
     public $title = 'KYC Approved';
     public $icon = 'document-text';
 
@@ -25,7 +24,6 @@ class KYCApproved extends Notification
     public function __construct(KYC $kyc)
     {
         $this->kyc = $kyc;
-        $this->kycService = app(KYCService::class);
     }
 
     /**

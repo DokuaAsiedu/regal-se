@@ -2,12 +2,9 @@
 
 namespace App\Services;
 
-use App\Enums\Roles;
+use App\Events\KYCApproved;
 use App\Events\KYCSubmitted;
 use App\Exceptions\CustomException;
-use App\Models\KYC;
-use App\Notifications\KYCApproved;
-use App\Notifications\KYCRejected;
 use App\Repositories\KYCRepository;
 use App\Services\StatusService;
 use Illuminate\Support\Facades\Auth;
@@ -171,6 +168,8 @@ class KYCService
 
         if (!$auto_approve_enabled) {
             KYCSubmitted::dispatch($kyc);
+        } else {
+            KYCApproved::dispatch($kyc);
         }
     }
 
@@ -191,13 +190,7 @@ class KYCService
         $kyc->rejection_reason = null;
         $kyc->save();
 
-        $this->sendKYCApprovedNotification($kyc);
-    }
-
-    public function sendKYCApprovedNotification(KYC $kyc)
-    {
-        // notify customer
-        $kyc->user->notify(new KYCApproved($kyc));
+        KYCApproved::dispatch($kyc);
     }
 
     public function rejectKYC($kyc, $rejection_reason)
