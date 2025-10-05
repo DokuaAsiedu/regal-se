@@ -9,6 +9,8 @@ use Spatie\Activitylog\LogOptions;
 
 class CompanyStaff extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'staff_id',
         'ghana_card_number',
