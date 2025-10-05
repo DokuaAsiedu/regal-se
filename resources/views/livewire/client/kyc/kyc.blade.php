@@ -1,6 +1,11 @@
 <div class="flex flex-col gap-6">
     @if (!$edit_mode)
         <div class="grid lg:grid-cols-2 gap-6">
+            @if ($kyc)
+                <div class="col-span-2 ms-auto">
+                    <x-status :status="$kyc->status" />
+                </div>
+            @endif
             <div class="col-span-1 lg:col-span-2 flex flex-col gap-2">
                 <flux:heading level="2" size="xl" class="">{{ __('Personal Details') }}
                 </flux:heading>
@@ -8,32 +13,32 @@
 
             <div class="flex flex-col gap-2">
                 <flux:heading level="4" size="lg">{{ __('Full Name') }}</flux:heading>
-                <flux:text>{{ $customer_name }}</flux:text>
+                <flux:text>{{ $name }}</flux:text>
             </div>
 
             <div class="flex flex-col gap-2">
                 <flux:heading level="4" size="lg">{{ __('Phone Number') }}</flux:heading>
-                <flux:text>{{ $customer_phone_prefix . $customer_phone }}</flux:text>
+                <flux:text>{{ $phone_prefix . $phone }}</flux:text>
             </div>
 
             <div class="flex flex-col gap-2">
                 <flux:heading level="4" size="lg">{{ __('Address') }}</flux:heading>
-                <flux:text>{{ $customer_address }}</flux:text>
+                <flux:text>{{ $address }}</flux:text>
             </div>
 
             <div class="flex flex-col gap-2">
                 <flux:heading level="4" size="lg">{{ __('Ghana Card Number') }}</flux:heading>
-                <flux:text>{{ $customer_ghana_card_number }}</flux:text>
+                <flux:text>{{ $ghana_card_number }}</flux:text>
             </div>
 
             <div class="flex flex-col gap-2">
                 <flux:heading level="4" size="lg">{{ __('Date Of Birth') }}</flux:heading>
-                <flux:text>{{ $customer_date_of_birth }}</flux:text>
+                <flux:text>{{ $date_of_birth }}</flux:text>
             </div>
 
             <div class="flex flex-col gap-2">
                 <flux:heading level="4" size="lg">{{ __('Email') }}</flux:heading>
-                <flux:text>{{ $customer_email }}</flux:text>
+                <flux:text>{{ $email }}</flux:text>
             </div>
 
             <div class="col-span-1 lg:col-span-2 mt-8 flex flex-col gap-2">
@@ -47,31 +52,21 @@
             </div>
 
             <div class="flex flex-col gap-2">
+                <flux:heading level="4" size="lg">{{ __('Staff Id') }}</flux:heading>
+                <flux:text>{{ $staff_id }}</flux:text>
+            </div>
+
+            <div class="flex flex-col gap-2">
                 <flux:heading level="4" size="lg">{{ __('Current Position') }}</flux:heading>
-                <flux:text>{{ $customer_current_position }}</flux:text>
-            </div>
-
-            <div class="flex flex-col gap-2">
-                <flux:heading level="4" size="lg">{{ __('Company Contact Number') }}</flux:heading>
-                <flux:text>{{ $company_phone_prefix . $company_phone }}</flux:text>
-            </div>
-
-            <div class="flex flex-col gap-2">
-                <flux:heading level="4" size="lg">{{ __('Company Address') }}</flux:heading>
-                <flux:text>{{ $company_address }}</flux:text>
-            </div>
-
-            <div class="flex flex-col gap-2">
-                <flux:heading level="4" size="lg">{{ __('Company Email') }}</flux:heading>
-                <flux:text>{{ $company_email }}</flux:text>
+                <flux:text>{{ $current_position }}</flux:text>
             </div>
 
             <div class="flex flex-col gap-2">
                 <flux:heading level="4" size="lg">{{ __('Employment Start Date') }}</flux:heading>
-                <flux:text>{{ $customer_employment_start_date }}</flux:text>
+                <flux:text>{{ $employment_start_date }}</flux:text>
             </div>
         </div>
-        @if (!$kyc_submission_approved)
+        @if (!$kyc_approved)
             <div class="self-end">
                 <x-button :name="__('Edit')" type="button" variant="primary" wire:click="edit" />
             </div>
@@ -81,40 +76,40 @@
 
         <form wire:submit="save" class="grid lg:grid-cols-2 gap-6">
             <div class="flex flex-col gap-2">
-                <label for="customer_name">{{ __('Full Name') }} <x-required /></label>
-                <flux:input type="text" id="customer_name" wire:model="customer_name" />
-                <flux:error name="customer_name" />
+                <label for="name">{{ __('Full Name') }} <x-required /></label>
+                <flux:input type="text" id="name" wire:model="name" />
+                <flux:error name="name" />
             </div>
 
             <div class="flex flex-col gap-2">
-                <label for="customer_phone">{{ __('Phone Number') }} <x-required /></label>
-                <flux:input type="text" id="customer_phone" wire:model="customer_phone" />
-                <flux:error name="customer_phone" />
+                <label for="phone">{{ __('Phone Number') }} <x-required /></label>
+                <flux:input type="text" id="phone" wire:model="phone" />
+                <flux:error name="phone" />
             </div>
 
             <div class="flex flex-col gap-2">
-                <label for="customer_address">{{ __('Address') }} <x-required /></label>
-                <flux:input type="text" id="customer_address" wire:model="customer_address" />
-                <flux:error name="customer_address" />
+                <label for="address">{{ __('Address') }} <x-required /></label>
+                <flux:input type="text" id="address" wire:model="address" />
+                <flux:error name="address" />
             </div>
 
             <div class="flex flex-col gap-2">
-                <label for="customer_ghana_card_number">{{ __('Ghana Card Number') }} <x-required /></label>
-                <flux:input type="text" id="customer_ghana_card_number" wire:model="customer_ghana_card_number" />
-                <flux:error name="customer_ghana_card_number" />
+                <label for="ghana_card_number">{{ __('Ghana Card Number') }} <x-required /></label>
+                <flux:input type="text" id="ghana_card_number" wire:model="ghana_card_number" />
+                <flux:error name="ghana_card_number" />
             </div>
 
             <div class="flex flex-col gap-2">
-                <label for="customer_date_of_birth">{{ __('Date Of Birth') }} <x-required /></label>
-                <input type="date" id="customer_date_of_birth" class="p-2 border rounded-lg"
-                    wire:model="customer_date_of_birth" />
-                <flux:error name="customer_date_of_birth" />
+                <label for="date_of_birth">{{ __('Date Of Birth') }} <x-required /></label>
+                <input type="date" id="date_of_birth" class="p-2 border rounded-lg"
+                    wire:model="date_of_birth" />
+                <flux:error name="date_of_birth" />
             </div>
 
             <div class="flex flex-col gap-2">
-                <label for="customer_email">{{ __('Email') }} <x-required /></label>
-                <flux:input type="text" id="customer_email" wire:model="customer_email" />
-                <flux:error name="customer_email" />
+                <label for="email">{{ __('Email') }} <x-required /></label>
+                <flux:input type="text" id="email" wire:model="email" />
+                <flux:error name="email" />
             </div>
 
             @if (!auth()->check())
@@ -137,40 +132,33 @@
             </div>
 
             <div class="flex flex-col gap-2">
-                <label for="company_name">{{ __('Company Name') }} <x-required /></label>
-                <flux:input type="text" id="company_name" wire:model="company_name" />
-                <flux:error name="company_name" />
+                <label for="company_id">{{ __('Company') }} <x-required /></label>
+                <flux:select id="company_id" wire:model.live="company_id">
+                    <flux:select.option value="">Select an option...</flux:select.option>
+                    @foreach ($this->companies as $item)
+                        <flux:select.option value="{{ $item->id }}">{{ $item->name }}</flux:select.option>
+                    @endforeach
+                </flux:select>
+                <flux:error name="company_id" />
             </div>
 
             <div class="flex flex-col gap-2">
-                <label for="customer_current_position">{{ __('Current Position') }} <x-required /></label>
-                <flux:input type="text" id="customer_current_position" wire:model="customer_current_position" />
-                <flux:error name="customer_current_position" />
+                <label for="staff_id">{{ __('Staff Id') }} <x-required /></label>
+                <flux:input type="text" id="staff_id" wire:model="staff_id" />
+                <flux:error name="staff_id" />
             </div>
 
             <div class="flex flex-col gap-2">
-                <label for="company_phone">{{ __('Company Contact Number') }} <x-required /></label>
-                <flux:input type="text" id="company_phone" wire:model="company_phone" />
-                <flux:error name="company_phone" />
+                <label for="current_position">{{ __('Current Position') }} <x-required /></label>
+                <flux:input type="text" id="current_position" wire:model="current_position" />
+                <flux:error name="current_position" />
             </div>
 
             <div class="flex flex-col gap-2">
-                <label for="company_address">{{ __('Company Address') }} <x-required /></label>
-                <flux:input type="text" id="company_address" wire:model="company_address" />
-                <flux:error name="company_address" />
-            </div>
-
-            <div class="flex flex-col gap-2">
-                <label for="company_email">{{ __('Company Email') }} <x-required /></label>
-                <flux:input type="text" id="company_email" wire:model="company_email" />
-                <flux:error name="company_email" />
-            </div>
-
-            <div class="flex flex-col gap-2">
-                <label for="customer_employment_start_date">{{ __('Employment Start Date') }} <x-required /></label>
-                <input type="date" id="customer_employment_start_date" class="p-2 border rounded-lg"
-                    wire:model="customer_employment_start_date" />
-                <flux:error name="customer_employment_start_date" />
+                <label for="employment_start_date">{{ __('Employment Start Date') }} <x-required /></label>
+                <input type="date" id="employment_start_date" class="p-2 border rounded-lg"
+                    wire:model="employment_start_date" />
+                <flux:error name="employment_start_date" />
             </div>
 
             <div class="col-span-1 lg:col-span-2 flex justify-between gap-8">
@@ -182,19 +170,15 @@
 </div>
 @script
     <script>
-        let iti = window.initIntlTelInput('customer_phone');
-        let companyIti = window.initIntlTelInput('company_phone');
-        if (iti) iti.setCountry($wire.customer_phone_country_code)
-        if (companyIti) companyIti.setCountry($wire.company_phone_country_code)
+        let iti = window.initIntlTelInput('phone');
+        if (iti) iti.setCountry($wire.phone_country_code)
 
         Livewire.hook('morphed', ({
             component,
             cleanup
         }) => {
-            iti = window.initIntlTelInput('customer_phone');
-            companyIti = window.initIntlTelInput('company_phone');
-            if (iti) iti.setCountry(component.canonical.customer_phone_country_code)
-            if (companyIti) companyIti.setCountry(component.canonical.company_phone_country_code)
+            iti = window.initIntlTelInput('phone');
+            if (iti) iti.setCountry(component.canonical.phone_country_code)
         })
 
         Livewire.hook('commit', ({
@@ -206,10 +190,8 @@
         }) => {
             // Runs immediately before a commit's payload is sent to the server...
             if ($wire.edit_mode) {
-                commit.updates.customer_phone_prefix = iti.getSelectedCountryData().dialCode
-                commit.updates.customer_phone_country_code = iti.getSelectedCountryData().iso2
-                commit.updates.company_phone_prefix = companyIti.getSelectedCountryData().dialCode
-                commit.updates.company_phone_country_code = companyIti.getSelectedCountryData().iso2
+                commit.updates.phone_prefix = iti.getSelectedCountryData().dialCode
+                commit.updates.phone_country_code = iti.getSelectedCountryData().iso2
             }
         })
     </script>

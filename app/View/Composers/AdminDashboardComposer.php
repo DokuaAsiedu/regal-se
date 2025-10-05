@@ -2,7 +2,7 @@
 
 namespace App\View\Composers;
 
-use App\Models\KYCSubmission;
+use App\Models\KYC;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\User;
@@ -23,8 +23,8 @@ class AdminDashboardComposer
         $orders_today = Order::whereDate('created_at', today())->get();
         $payment_sum = formatCurrency(Payment::sum('amount'));
         $overdue_payments = Payment::overdue()->count();
-        $kyc_count = KYCSubmission::count();
-        $pending_kyc_count = KYCSubmission::pending()->count();
+        $kyc_count = KYC::count();
+        $pending_kyc_count = KYC::pending()->count();
         $quick_stats = [
             [
                 'title' => [
@@ -60,7 +60,7 @@ class AdminDashboardComposer
 
         $orders_last_30_days = $this->getDataFromGivenPeriod(Order::class);
         $payments_last_30_days = $this->getDataFromGivenPeriod(Payment::class);
-        $kycs_last_30_days = $this->getDataFromGivenPeriod(KYCSubmission::class);
+        $kycs_last_30_days = $this->getDataFromGivenPeriod(KYC::class);
         $users_last_30_days = $this->getDataFromGivenPeriod(User::class);
         $chart_data = [
             [

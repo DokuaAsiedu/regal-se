@@ -2,32 +2,33 @@
 
 namespace App\Repositories;
 
-use App\Models\User;
+use App\Models\KYC;
 
-class UserRepository extends BaseRepository
+class KYCRepository extends BaseRepository
 {
     private $fieldsSearchable = [
         'id',
         'name',
-        'email',
         'phone_prefix',
         'phone',
         'phone_country_code',
-        'status_id',
-        'role_id',
-        'delivery_address',
-        'delivery_address_landmark',
+        'email',
+        'address',
         'ghana_card_number',
         'date_of_birth',
-        'company_id',
-        'staff_id',
         'current_position',
-        'employment_start_date'
+        'employment_start_date',
+        'staff_id',
+        'company_id',
+        'status_id',
+        'user_id',
+        'reviewed_by',
+        'rejection_reason',
     ];
 
     public function model()
     {
-        return User::class;
+        return KYC::class;
     }
 
     public function getFieldsSearchable()

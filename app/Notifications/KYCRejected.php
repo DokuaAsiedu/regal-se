@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Models\KYCSubmission;
+use App\Models\KYC;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -20,7 +20,7 @@ class KYCRejected extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct(KYCSubmission $kyc)
+    public function __construct(KYC $kyc)
     {
         $this->kyc = $kyc;
         $this->rejection_reason = $this->kyc->rejection_reason;

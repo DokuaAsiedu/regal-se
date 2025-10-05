@@ -3,7 +3,7 @@
 namespace App\Notifications;
 
 use App\Enums\Roles;
-use App\Models\KYCSubmission;
+use App\Models\KYC;
 use App\Services\KYCService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -22,7 +22,7 @@ class KYCApproved extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct(KYCSubmission $kyc)
+    public function __construct(KYC $kyc)
     {
         $this->kyc = $kyc;
         $this->kycService = app(KYCService::class);

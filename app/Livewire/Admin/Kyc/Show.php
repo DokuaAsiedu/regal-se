@@ -14,20 +14,11 @@ class Show extends Component
 {
     use HandlesErrorMessage;
 
-    public $kyc_id;
     public $kyc;
-    public $customer_name;
-    public $customer_phone;
-    public $customer_address;
-    public $customer_ghana_card_number;
-    public $customer_date_of_birth;
-    public $customer_email;
-    public $company_name;
-    public $customer_current_position;
-    public $company_phone;
-    public $company_address;
-    public $company_email;
-    public $customer_employment_start_date;
+    public $phone;
+    public $date_of_birth;
+    public $ghana_card_number;
+    public $company;
 
     public $is_pending;
 
@@ -43,8 +34,7 @@ class Show extends Component
     public function mount($kycId)
     {
         try {
-            $this->kyc_id = $kycId;
-            $this->loadData();
+            $this->loadData($kycId);
         } catch (Throwable $err) {
             $default_message = __('Error showing KYC');
             $message = $this->handle($err, $default_message)->message;
@@ -52,21 +42,12 @@ class Show extends Component
         }
     }
 
-    public function loadData()
+    public function loadData($kyc_id)
     {
-        $this->kyc = $this->kycService->find($this->kyc_id);
-        $this->customer_name = $this->kyc->customer_name ?? 'N/A';
-        $this->customer_phone = formatPhone($this->kyc->customer_phone, $this->kyc->customer_phone_prefix) ?? 'N/A';
-        $this->customer_address = $this->kyc->customer_address ?? 'N/A';
-        $this->customer_ghana_card_number = $this->kyc->customer_ghana_card_number ?? 'N/A';
-        $this->customer_date_of_birth = $this->kyc->customer_date_of_birth ?? 'N/A';
-        $this->customer_email = $this->kyc->customer_email ?? 'N/A';
-        $this->company_name = $this->kyc->company_name ?? 'N/A';
-        $this->customer_current_position = $this->kyc->customer_current_position ?? 'N/A';
-        $this->company_phone = formatPhone($this->kyc->company_phone, $this->kyc->company_phone_prefix) ?? 'N/A';
-        $this->company_address = $this->kyc->company_address ?? 'N/A';
-        $this->company_email = $this->kyc->company_email ?? 'N/A';
-        $this->customer_employment_start_date = $this->kyc->customer_employment_start_date ?? 'N/A';
+        $this->kyc = $this->kycService->find($kyc_id);
+        $this->phone = formatPhone($this->kyc->phone, $this->kyc->phone_prefix) ?? 'N/A';
+        $this->date_of_birth = $this->kyc->date_of_birth ?? 'N/A';
+        $this->company = $this->kyc->company;
 
         $this->is_pending = $this->statusService->isPending($this->kyc->status_id);
     }
@@ -77,7 +58,7 @@ class Show extends Component
             DB::beginTransaction();
             $this->kycService->approveKYC($this->kyc);
             DB::commit();
-            $this->loadData();
+            $this->loadData($this->kyc->id);
             flash()->success(__('Successfully approved KYC'));
         } catch (Throwable $err) {
             $default_message = __('Error approving KYC');
@@ -96,7 +77,7 @@ class Show extends Component
             $message = __('KYC rejected');
             flash()->success($message);
             $this->dispatch('closeModal');
-            $this->loadData();
+            $this->loadData($this->kyc->id);
         } catch (Throwable $err) {
             DB::rollBack();
             $default_message = __('Error rejecting KYC');

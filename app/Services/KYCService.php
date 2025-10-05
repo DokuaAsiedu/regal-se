@@ -4,11 +4,11 @@ namespace App\Services;
 
 use App\Enums\Roles;
 use App\Exceptions\CustomException;
-use App\Models\KYCSubmission;
+use App\Models\KYC;
 use App\Notifications\KYCApproved;
 use App\Notifications\KYCRejected;
 use App\Notifications\KYCSubmitted;
-use App\Repositories\KYCSubmissionRepository;
+use App\Repositories\KYCRepository;
 use App\Services\StatusService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -16,50 +16,54 @@ use Illuminate\Support\Facades\Notification;
 
 class KYCService
 {
-    protected $kycSubmissionRepository;
+    protected $kycRepository;
     protected $statusService;
     protected $userService;
     protected $roleService;
+    protected $storeSettingsService;
+    protected $companyService;
 
     /**
      * Create a new class instance.
      */
-    public function __construct(KYCSubmissionRepository $kycSubmissionRepository, StatusService $statusService, UserService $userService, RoleService $roleService)
+    public function __construct(KYCRepository $kycRepository, StatusService $statusService, UserService $userService, RoleService $roleService, StoreSettingsService $storeSettingsService, CompanyService $companyService)
     {
-        $this->kycSubmissionRepository = $kycSubmissionRepository;
+        $this->kycRepository = $kycRepository;
         $this->statusService = $statusService;
         $this->userService = $userService;
         $this->roleService = $roleService;
+        $this->storeSettingsService = $storeSettingsService;
+        $this->companyService = $companyService;
     }
 
     public function find($id)
     {
-        return $this->kycSubmissionRepository->find($id);
+        return $this->kycRepository->find($id);
     }
 
     public function all()
     {
-        return $this->kycSubmissionRepository->all();
+        return $this->kycRepository->all();
     }
 
     public function allQuery($search = [])
     {
-        return $this->kycSubmissionRepository->allQuery($search);
+        return $this->kycRepository->allQuery($search);
     }
 
     public function store($input)
     {
-        return $this->kycSubmissionRepository->create($input);
+        return $this->kycRepository->create($input);
     }
 
     public function update($id, $input)
     {
-        return $this->kycSubmissionRepository->update($input, $id);
+        return $this->kycRepository->update($input, $id);
     }
 
     public function delete($ids)
     {
-        $this->kycSubmissionRepository->delete($ids);
+        $this->kycRepository->delete($ids);
     }
 
     public function validStatuses()
@@ -70,70 +74,106 @@ class KYCService
         ]);
     }
 
-    public function submitKYC($input, $kyc_submission_id = null)
+    public function submitKYC($input, $kyc_id = null)
     {
-        if ($kyc_submission_id) {
-            $kyc_submission = $this->update($kyc_submission_id, $input);
+        if ($kyc_id) {
+            $kyc = $this->update($kyc_id, $input);
         } else {
-            $kyc_submission = $this->store($input);
+            $kyc = $this->store($input);
+        }
+
+        // if auto approve is enabled, check if ghana card, staff id, and company id match with what has been set in company staff table
+        $auto_approve_enabled = $this->storeSettingsService->autoApproveKyc();
+        if ($auto_approve_enabled) {
+            $company = $this->companyService->find($input['company_id']);
+            $employee = $company->staff()
+                ->where('staff_id', $input['staff_id'])
+                ->first();
+            if (!$employee) {
+                throw new CustomException('Oops, it looks like something did not match, we could not verify your details. Please review your information and try submitting again.');
+            }
+
+            if ($employee && $employee->user_id !== null) {
+                throw new CustomException('Oops, it looks like something did not match, we could not verify your details. Please review your information and try submitting again.');
+            }
+            $kyc_valid = $employee->staff_id == $input['staff_id'] && $employee->ghana_card_number == $input['ghana_card_number'];
+
+            if (!$kyc_valid) {
+                throw new CustomException('Oops, it looks like something did not match, we could not verify your details. Please review your information and try submitting again.');
+            }
+
+            // update employee user id on company staff table
+            $employee->update([
+                'staff_id' => $input['staff_id'],
+            ]);
+            $kyc->update([
+                'status_id' => $this->statusService->approved()->id,
+                'rejection_reason' => null,
+                'reviewed_by' => null,
+            ]);
         }
 
         if (!Auth::check()) {
             $user_payload = [
-                'name' => $input['customer_name'],
-                'email' => $input['customer_email'],
-                'phone_prefix' => $input['customer_phone_prefix'],
-                'phone' => $input['customer_phone'],
-                'phone_country_code' => $input['customer_phone_country_code'],
-                'email' => $input['customer_email'],
+                'name' => $input['name'],
+                'email' => $input['email'],
+                'phone_prefix' => $input['phone_prefix'],
+                'phone' => $input['phone'],
+                'phone_country_code' => $input['phone_country_code'],
+                'email' => $input['email'],
                 'status_id' => $this->statusService->active()->id,
                 'role_id' => $this->roleService->customerRole()->id,
                 'password' => Hash::make($input['password']),
-                'delivery_address' => $input['customer_address'],
-                'ghana_card_number' => $input['customer_ghana_card_number'],
-                'date_of_birth' => $input['customer_date_of_birth'],
-                'company_name' => $input['company_name'],
-                'company_email' => $input['company_email'],
-                'company_phone_prefix' => $input['company_phone_prefix'],
-                'company_phone' => $input['company_phone'],
-                'company_phone_country_code' => $input['company_phone_country_code'],
-                'company_address' => $input['company_address'],
-                'current_position' => $input['customer_current_position'],
-                'employment_start_date' => $input['customer_employment_start_date'],
+                'delivery_address' => $input['address'],
+                'ghana_card_number' => $input['ghana_card_number'],
+                'date_of_birth' => $input['date_of_birth'],
+                'company_id' => $input['company_id'],
+                'staff_id' => $input['staff_id'],
+                'current_position' => $input['current_position'],
+                'employment_start_date' => $input['employment_start_date'],
             ];
             $user = $this->userService->storeAndLogin($user_payload);
         } else {
             $user_payload = [
-                'name' => $input['customer_name'],
-                'email' => $input['customer_email'],
-                'phone_prefix' => $input['customer_phone_prefix'],
-                'phone' => $input['customer_phone'],
-                'phone_country_code' => $input['customer_phone_country_code'],
-                'email' => $input['customer_email'],
-                'delivery_address' => $input['customer_address'],
-                'ghana_card_number' => $input['customer_ghana_card_number'],
-                'date_of_birth' => $input['customer_date_of_birth'],
-                'company_name' => $input['company_name'],
-                'company_email' => $input['company_email'],
-                'company_phone_prefix' => $input['company_phone_prefix'],
-                'company_phone' => $input['company_phone'],
-                'company_phone_country_code' => $input['company_phone_country_code'],
-                'company_address' => $input['company_address'],
-                'current_position' => $input['customer_current_position'],
-                'employment_start_date' => $input['customer_employment_start_date'],
+                'name' => $input['name'],
+                'email' => $input['email'],
+                'phone_prefix' => $input['phone_prefix'],
+                'phone' => $input['phone'],
+                'phone_country_code' => $input['phone_country_code'],
+                'email' => $input['email'],
+                'delivery_address' => $input['address'],
+                'ghana_card_number' => $input['ghana_card_number'],
+                'date_of_birth' => $input['date_of_birth'],
+                'company_id' => $input['company_id'],
+                'staff_id' => $input['staff_id'],
+                'current_position' => $input['current_position'],
+                'employment_start_date' => $input['employment_start_date'],
             ];
             $user = $this->userService->update(Auth::id(), $user_payload);
         }
 
-        $kyc_submission->update([
-            'user_id' => $user->id,
-            'status_id' => $this->statusService->pending()->id,
-        ]);
+        if ($auto_approve_enabled) {
+            $status_id = $this->statusService->approved()->id;
+        } else {
+            $status_id = $this->statusService->pending()->id;
+        }
 
-        $this->sendKYCSubmittedNotification($kyc_submission);
+        if (!empty($employee)) {
+            $employee->update([
+                'user_id' => $user->id,
+            ]);
+        }
+
+        $kyc_payload = [
+            'user_id' => $user->id,
+            'status_id' => $status_id,
+        ];
+        $kyc->update($kyc_payload);
+
+        $this->sendKYCSubmittedNotification($kyc);
     }
 
-    public function sendKYCSubmittedNotification(KYCSubmission $kyc)
+    public function sendKYCSubmittedNotification(KYC $kyc)
     {
         // notify customer
         $kyc->user->notify(new KYCSubmitted($kyc));
@@ -146,6 +186,16 @@ class KYCService
     public function approveKYC($kyc)
     {
         $kyc->status_id = $this->statusService->approved()->id;
+        $company = $this->companyService->find($kyc->company_id);
+        $employee = $company->staff()
+            ->where('staff_id', $kyc->staff_id)
+            ->first();
+
+        if ($employee) {
+            $employee->update([
+                'user_id' => $kyc->user_id,
+            ]);
+        }
         $kyc->reviewed_by = Auth::id();
         $kyc->rejection_reason = null;
         $kyc->save();
@@ -153,7 +203,7 @@ class KYCService
         $this->sendKYCApprovedNotification($kyc);
     }
 
-    public function sendKYCApprovedNotification(KYCSubmission $kyc)
+    public function sendKYCApprovedNotification(KYC $kyc)
     {
         // notify customer
         $kyc->user->notify(new KYCApproved($kyc));
@@ -165,9 +215,11 @@ class KYCService
         $kyc->reviewed_by = Auth::id();
         $kyc->rejection_reason = $rejection_reason;
         $kyc->save();
+
+        $this->sendKYCRejectedNotification($kyc);
     }
 
-    public function sendKYCRejectedNotification(KYCSubmission $kyc)
+    public function sendKYCRejectedNotification(KYC $kyc)
     {
         // notify customer
         $kyc->user->notify(new KYCRejected($kyc));

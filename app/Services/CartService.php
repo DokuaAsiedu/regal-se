@@ -19,15 +19,17 @@ class CartService
     protected $cartItemRepository;
     protected $productService;
     protected $storeSettingsService;
+    protected $statusService;
 
     /**
      * Create a new class instance.
      */
-    public function __construct(CartItemRepository $cartItemRepository, ProductService $productService, StoreSettingsService $storeSettingsService)
+    public function __construct(CartItemRepository $cartItemRepository, ProductService $productService, StoreSettingsService $storeSettingsService, StatusService $statusService)
     {
         $this->cartItemRepository = $cartItemRepository;
         $this->productService = $productService;
         $this->storeSettingsService = $storeSettingsService;
+        $this->statusService = $statusService;
     }
 
     public function find($id)
@@ -108,9 +110,14 @@ class CartService
         if ($payment_plan == PaymentPlan::Installment->value) {
             if (Auth::check()) {
                 $user = Auth::user();
-                if (!$user->approvedKyc()) {
+                if (!$user->kyc) {
                     redirect()->route('client.kyc');
-                    throw new CustomException('Please submit your KYC information and wait for approval to access this payment plan');
+                    throw new CustomException('Please submit your KYC information to access this payment plan');
+                }
+
+                if ($user->kyc->status_id != $this->statusService->approved()->id) {
+                    redirect()->route('client.kyc');
+                    throw new CustomException('Please submit your KYC information to access this payment plan');
                 }
             } else {
                 redirect()->route('client.kyc');

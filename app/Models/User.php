@@ -34,12 +34,8 @@ class User extends Authenticatable
         'delivery_address_landmark',
         'ghana_card_number',
         'date_of_birth',
-        'company_name',
-        'company_email',
-        'company_phone_prefix',
-        'company_phone',
-        'company_phone_country_code',
-        'company_address',
+        'company_id',
+        'staff_id',
         'current_position',
         'employment_start_date'
     ];
@@ -106,15 +102,13 @@ class User extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
-    public function kycSubmissions()
+    public function kyc()
     {
-        return $this->hasMany(KYCSubmission::class);
+        return $this->hasOne(KYC::class);
     }
 
-    public function approvedKyc()
+    public function company()
     {
-        return $this->kycSubmissions()
-            ->approved()
-            ->first();
+        return $this->belongsTo(Company::class);
     }
 }
