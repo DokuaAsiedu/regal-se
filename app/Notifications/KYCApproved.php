@@ -44,6 +44,7 @@ class KYCApproved extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
+            ->cc($this->kyc->email)
             ->greeting("Hello $notifiable->name,")
             ->line('We are happy to inform you that your KYC has been approved. You can now access all services available to verified users. Thank you for completing the verification process.');
     }
