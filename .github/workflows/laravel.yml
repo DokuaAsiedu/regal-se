@@ -10,7 +10,7 @@ on:
       environment:
         description: "Environment to deploy to"
         required: false
-        default: "Production"
+        default: "Development"
         type: choice
         options:
           - Development
@@ -19,7 +19,7 @@ on:
 jobs:
   laravel-tests:
     runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environment == 'Production' && 'Production' || null }}
+    environment: ${{ github.event.inputs.environment == 'Development' && 'Development' || 'Production' }}
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
