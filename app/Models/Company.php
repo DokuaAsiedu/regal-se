@@ -34,4 +34,9 @@ class Company extends Model
     {
         return $this->belongsTo(Status::class);
     }
+
+    public function staff()
+    {
+        return $this->hasMany(CompanyStaff::class);
+    }
 }
