@@ -145,7 +145,9 @@ class OrderService
 
         $first_payment = $this->createOrderPayments($order);
 
-        $payment_link = $this->paymentService->getPaymentLink($first_payment, $order->customer_email);
+        $card_only = $order->payments->count() > 1;
+
+        $payment_link = $this->paymentService->getPaymentLink($first_payment, $order->customer_email, $card_only);
 
         return $payment_link;
     }

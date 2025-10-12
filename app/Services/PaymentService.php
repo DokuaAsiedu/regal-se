@@ -54,7 +54,7 @@ class PaymentService
         $this->paymentRepository->delete($ids);
     }
 
-    public function getPaymentLink(Payment $payment, string $customer_email)
+    public function getPaymentLink(Payment $payment, string $customer_email, $card_only = false)
     {
         $amount = (int) ($payment->amount * 100);
         $currency = $payment->currency;
@@ -63,6 +63,10 @@ class PaymentService
             'amount' => $amount,
             'currency' => $currency,
         ];
+
+        if ($card_only) {
+            $data['channels'] = ['card'];
+        }
 
         $response = $this->transactionService->initializePaystackTransaction($data, $payment);
 
