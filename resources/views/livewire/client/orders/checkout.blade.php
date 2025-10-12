@@ -55,13 +55,13 @@
 
                         <flux:text>{{ __('Price') }}: {{ formatCurrency($elem->price) }}</flux:text>
 
-                        {{-- @if (isset($elem->down_payment_amount))
-                            <flux:text class="text-xs">{{ __('Down payment') }}: {{ $this->currency . ' ' . $elem->down_payment_amount }} ({{ $elem->down_payment_percentage }}%)</flux:text>
+                        @if (isInstallment($elem->payment_plan->value))
+                            {{-- <flux:text class="text-xs">{{ __('Down payment') }}: {{ $this->currency . ' ' . $elem->down_payment_amount }} ({{ $elem->down_payment_percentage }}%)</flux:text> --}}
 
-                            <flux:text class="text-xs">{{ __('Installment Amount') }}: {{ $this->currency . ' ' . $elem->installment_amount }}</flux:text>
+                            <flux:text class="text-xs">{{ __('Installment Amount') }}: {{ formatCurrency($elem->installment_amount) }}</flux:text>
 
                             <flux:text class="text-xs">{{ __('Installment period') }}: {{ $elem->installment_months }} {{ __('months') }}</flux:text>
-                        @endif --}}
+                        @endif
                     </div>
                 </div>
                 <hr />

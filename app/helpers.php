@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\PaymentPlan;
 use App\Services\StoreSettingsService;
 
 function formatPhone(string $phone, string $prefix)
@@ -39,4 +40,9 @@ function formatCurrency($amount, $currency_code = null, $decimal_places = 2, $th
     $str = $currency . ' ' . number_format($amount, $decimal_places, '.', $thousands_separator);
 
     return $str;
+}
+
+function isInstallment(string $payment_plan): bool
+{
+    return $payment_plan == PaymentPlan::Installment->value;
 }
