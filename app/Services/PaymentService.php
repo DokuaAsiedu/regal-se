@@ -56,7 +56,7 @@ class PaymentService
 
     public function getPaymentLink(Payment $payment, string $customer_email)
     {
-        $amount = $payment->amount * 100;
+        $amount = (int) ($payment->amount * 100);
         $currency = $payment->currency;
         $data = [
             'email' => $customer_email,
