@@ -3,7 +3,7 @@
 
     <div class="flex flex-col gap-6">
         <div class="flex justify-between gap-2">
-            <div class="flex items-center gap-4">
+            <div class="flex items-center flex-wrap gap-4">
                 <flux:heading size="lg">{{ __('Order') }} #{{ $order->code }}</flux:heading>
                 <x-status :status="$order->status" />
                 <div class="flex items-center gap-4">
@@ -18,16 +18,20 @@
             </div>
         </div>
 
-        <div class="grid md:grid-cols-5 gap-4">
-            <div class="col-span-1 md:col-span-3">
-                <div class="flex items-center gap-2">
-                    <flux:heading level="3" size="lg">{{ __('Items') }}</flux:heading>
-                    <flux:badge size="sm" variant="pill" color="blue">{{ $order->orderItems->count() }}
-                    </flux:badge>
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <div class="col-span-1 max-md:order-2 md:col-span-3">
+                <div class="flex flex-col gap-6">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <flux:heading level="3" size="lg">{{ __('Items') }}</flux:heading>
+                            <flux:badge size="sm" variant="pill" color="blue">{{ $order->orderItems->count() }}
+                            </flux:badge>
+                        </div>
+                        <livewire:tables.admin.orders.order-items-table :order_id="$order->id" />
+                    </div>
                 </div>
-                <livewire:tables.admin.orders.order-items-table :order_id="$order->id" />
             </div>
-            <div class="col-span-1 md:col-span-2 flex flex-col gap-2">
+            <div class="col-span-1 max-md:order-1 md:col-span-2 flex flex-col gap-2">
                 <flux:heading level="3" size="lg">{{ __('Customer') }}</flux:heading>
                 <hr />
                 <div class="flex flex-col gap-2">
