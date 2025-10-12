@@ -222,7 +222,7 @@ class OrderService
         $first_payment = $this->paymentService->store($first_payment_payload);
 
         if ($installment_amount > 0) {
-            for ($i = 0; $i < $installment_months; $i++) {
+            for ($i = 0; $i <= $installment_months; $i++) {
                 $due_date = $first_due_date->copy()->addMonths($i+1);
                 $payment_payload = [
                     'payable_type' => $order_class_name,
