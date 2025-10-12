@@ -143,8 +143,11 @@ class OrderService
 
         $this->cartService->deleteCart();
 
-        // send notification
-        $this->sendOrderPlacedNotification($order);
+        $first_payment = $this->createOrderPayments($order);
+
+        $payment_link = $this->paymentService->getPaymentLink($first_payment, $order->customer_email);
+
+        return $payment_link;
     }
 
     public function sendOrderPlacedNotification(Order $order)

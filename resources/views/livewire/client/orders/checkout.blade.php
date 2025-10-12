@@ -95,6 +95,7 @@
 
     Livewire.hook('commit', ({ component, commit, respond, succeed, fail }) => {
         // Runs immediately before a commit's payload is sent to the server...
+        if (component.name !== 'client.orders.checkout') return;
         commit.updates.customer_phone_prefix = iti.getSelectedCountryData().dialCode
         commit.updates.customer_phone_country_code = iti.getSelectedCountryData().iso2
     })

@@ -110,10 +110,12 @@ class Checkout extends Component
                 'landmark' => $this->landmark,
                 'delivery_note' => $this->delivery_note,
             ];
-            $this->orderService->placeOrder($payload);
+            $payment_link = $this->orderService->placeOrder($payload);
             DB::commit();
-            flash()->success(__('Your order has been placed!'));
-            redirect()->route('home');
+            $this->dispatch('openModal', 'components.modal', [
+                'view' => 'components.client.orders.order-placed',
+                'data' => $payment_link,
+            ]);
         } catch (Throwable $err) {
             DB::rollBack();
             $default_message = __('Sorry something went wrong whiles placing your order. Please try again later');
