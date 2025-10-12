@@ -53,7 +53,7 @@
 
                         <flux:text>{{ __('Quantity') }}: {{ $elem->quantity }}</flux:text>
 
-                        <flux:text>{{ __('Price') }}: {{ $this->currency . ' ' . $elem->price }}</flux:text>
+                        <flux:text>{{ __('Price') }}: {{ formatCurrency($elem->price) }}</flux:text>
 
                         {{-- @if (isset($elem->down_payment_amount))
                             <flux:text class="text-xs">{{ __('Down payment') }}: {{ $this->currency . ' ' . $elem->down_payment_amount }} ({{ $elem->down_payment_percentage }}%)</flux:text>
@@ -61,7 +61,7 @@
                             <flux:text class="text-xs">{{ __('Installment Amount') }}: {{ $this->currency . ' ' . $elem->installment_amount }}</flux:text>
 
                             <flux:text class="text-xs">{{ __('Installment period') }}: {{ $elem->installment_months }} {{ __('months') }}</flux:text>
-                        @endif
+                        @endif --}}
                     </div>
                 </div>
                 <hr />
@@ -73,12 +73,12 @@
         <div class="flex flex-col gap-5">
             <flux:text class="flex items-center justify-between">
                 <span>{{ __('Subtotal') }}:</span>
-                <span>{{ $this->currency . ' ' . $subtotal }}</span>
+                <span>{{ formatCurrency($subtotal) }}</span>
             </flux:text>
             <flux:separator />
             <flux:text class="flex items-center justify-between text-lg font-bold">
                 <span>{{ __('Total Amount') }}:</span>
-                <span>{{ $this->currency . ' ' . $total_amount }}</span>
+                <span>{{ formatCurrency($total_amount) }}</span>
             </flux:text>
         </div>
     </div>

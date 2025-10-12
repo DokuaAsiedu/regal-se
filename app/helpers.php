@@ -36,5 +36,7 @@ function formatCurrency($amount, $currency_code = null, $decimal_places = 2, $th
 {
     $currency = $currency_code ?? currency();
 
-    return $currency . ' ' . number_format($amount, $decimal_places, '.', $thousands_separator);
+    $str = $currency . ' ' . number_format($amount, $decimal_places, '.', $thousands_separator);
+
+    return $str;
 }
