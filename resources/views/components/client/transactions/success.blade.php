@@ -18,7 +18,7 @@
         </div>
         <div class="flex max-md:flex-col md:justify-between md:items-center md:gap:10">
             <h5 class="!px-0">{{ 'Amount:' }}</h5>
-            <flux:text>{{ $transaction_details['currency'] . ' ' . $transaction_details['amount'] }}</flux:text>
+            <flux:text>{{ formatCurrency((float) $transaction_details['amount'] / 100, $transaction_details['currency'] ) }}</flux:text>
         </div>
     </div>
     <flux:button variant="primary" href="#">{{ __('Track your order') }}</flux:button>
