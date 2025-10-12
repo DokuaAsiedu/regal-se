@@ -14,7 +14,7 @@ class OrderItemRepository extends BaseRepository
         'quantity',
         'unit_price',
         'payment_plan',
-        'down_payment_amount',
+        // 'down_payment_amount',
         'installment_months',
         'installment_amount',
     ];

@@ -18,8 +18,8 @@ class OrderItem extends Model
         'quantity',
         'unit_price',
         'payment_plan',
-        'down_payment_percentage',
-        'down_payment_amount',
+        // 'down_payment_percentage',
+        // 'down_payment_amount',
         'installment_months',
         'installment_amount',
     ];

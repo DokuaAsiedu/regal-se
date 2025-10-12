@@ -26,11 +26,11 @@
             <flux:error name="repayment_months" />
         </div>
 
-        <div class="flex flex-col gap-2">
+        {{-- <div class="flex flex-col gap-2">
             <label for="down_payment_percentage">{{ __('Down Payment Percentage') }} <x-required /></label>
             <flux:input type="number" id="down_payment_percentage" wire:model="down_payment_percentage" step="0.1" />
             <flux:error name="down_payment_percentage" />
-        </div>
+        </div> --}}
 
         <div class="flex flex-col gap-2">
             <label for="auto_approve_kyc">{{ __('Automatically Approve KYCs?') }} <x-required /></label>

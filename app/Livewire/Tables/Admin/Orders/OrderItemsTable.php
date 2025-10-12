@@ -51,8 +51,8 @@ final class OrderItemsTable extends PowerGridComponent
             ->add('payment', function ($row) {
                 return $row->payment_plan->value;
             })
-            ->add('down_payment_percentage')
-            ->add('down_payment_amount')
+            // ->add('down_payment_percentage')
+            // ->add('down_payment_amount')
             ->add('installment_months')
             ->add('installment_amount')
             ->add('created_at');
@@ -73,13 +73,13 @@ final class OrderItemsTable extends PowerGridComponent
 
             Column::make('Payment plan', 'payment'),
 
-            Column::make('Down payment percentage', 'down_payment_percentage')
-                ->sortable()
-                ->searchable(),
+            // Column::make('Down payment percentage', 'down_payment_percentage')
+            //     ->sortable()
+            //     ->searchable(),
 
-            Column::make('Down payment amount', 'down_payment_amount')
-                ->sortable()
-                ->searchable(),
+            // Column::make('Down payment amount', 'down_payment_amount')
+            //     ->sortable()
+            //     ->searchable(),
 
             Column::make('Installment months', 'installment_months')
                 ->sortable()

@@ -202,7 +202,7 @@ class OrderService
             if ($elem->payment_plan == PaymentPlan::Once) {
                 $first_payment_amount += $elem->unit_price * $elem->quantity;
             } else {
-                $first_payment_amount += $elem->down_payment_amount * $elem->quantity;
+                $first_payment_amount += $elem->installment_amount * $elem->quantity;
                 $installment_amount += $elem->installment_amount * $elem->quantity;
                 $installment_months = $elem->installment_months;
             }
@@ -263,7 +263,7 @@ class OrderService
         $value = 0;
         foreach ($order_items as $elem) {
             if ($elem->payment_plan == PaymentPlan::Installment) {
-                $value += $elem->down_payment_amount * $elem->quantity;
+                $value += $elem->installment_amount * $elem->quantity;
             } else {
                 $value += $elem->unit_price * $elem->quantity;
             }

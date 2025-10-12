@@ -28,13 +28,13 @@ Your order **#{{ $order->code }}** has been approved. Please find your order sum
                 <td align="right">
                     <div>
                         <flux:text>{{ formatCurrency($elem->unit_price) }}</flux:text>
-                        @if (isset($elem->down_payment_amount))
+                        {{-- @if (isset($elem->down_payment_amount))
                             <flux:text style="font-size: 0.75rem;">{{ __('Down payment') }}: {{ formatCurrency($elem->down_payment_amount) }} ({{ $elem->down_payment_percentage }}%)</flux:text>
 
                             <flux:text style="font-size: 0.75rem;">{{ __('Installment Amount') }}: {{ formatCurrency($elem->installment_amount) }}</flux:text>
 
                             <flux:text style="font-size: 0.75rem;">{{ __('Installment period') }}: {{ $elem->installment_months }} {{ __('months') }}</flux:text>
-                        @endif
+                        @endif --}}
                     </div>
                 </td>
             </tr>

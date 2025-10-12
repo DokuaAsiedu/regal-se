@@ -234,21 +234,21 @@ class CartService
             $user_key => $user_id,
         ])->get();
 
-        $down_payment_percentage = $this->storeSettingsService->downPaymentPercentage();
+        // $down_payment_percentage = $this->storeSettingsService->downPaymentPercentage();
         $installment_months = $this->storeSettingsService->repaymentMonths();
 
-        $cart_items = $cart_items->map(function ($elem) use ($down_payment_percentage, $installment_months) {
+        $cart_items = $cart_items->map(function ($elem) use ($installment_months) {
             $product = $this->productService->allQuery(['id' => $elem->product_id])->first();
             if ($product) {
                 $elem->name = $product->name;
                 $elem->price = $product->selling_price ?? 0;
                 $elem->payment_plan = $elem->payment_plan instanceof PaymentPlan ? $elem->payment_plan->value : $elem->payment_plan;
                 if ($elem->payment_plan->value == PaymentPlan::Installment->value) {
-                    $elem->down_payment_percentage = $down_payment_percentage;
-                    $elem->down_payment_amount = ($down_payment_percentage / 100) * $elem->price;
-                    $balance = $elem->price - $elem->down_payment_amount;
+                    // $elem->down_payment_percentage = $down_payment_percentage;
+                    // $elem->down_payment_amount = ($down_payment_percentage / 100) * $elem->price;
+                    // $balance = $elem->price - $elem->down_payment_amount;
                     $elem->installment_months = $installment_months;
-                    $elem->installment_amount = $balance / $installment_months;
+                    $elem->installment_amount = $elem->price / $installment_months;
                 }
 
                 return $elem;
