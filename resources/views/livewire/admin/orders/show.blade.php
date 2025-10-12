@@ -12,9 +12,9 @@
                 </div>
             </div>
             <div>
-                @if ($pending_order)
+                {{-- @if ($pending_order)
                     <flux:button variant="primary" color="green" wire:click="approve">{{ __('Approve') }}</flux:button>
-                @endif
+                @endif --}}
             </div>
         </div>
 
