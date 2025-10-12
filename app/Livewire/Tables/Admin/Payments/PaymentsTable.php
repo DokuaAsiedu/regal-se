@@ -18,6 +18,8 @@ final class PaymentsTable extends PowerGridComponent
 {
     public string $tableName = 'payments-table-pqtxfk-table';
 
+    public $payable_id;
+
     public function setUp(): array
     {
         $this->showCheckBox();
@@ -35,6 +37,9 @@ final class PaymentsTable extends PowerGridComponent
     {
         return Payment::query()
             ->with(['status'])
+            ->when($this->payable_id, function ($query, $payable_id) {
+                return $query->where('payable_id', $payable_id);
+            })
             ->orderByDesc('created_at');
     }
 

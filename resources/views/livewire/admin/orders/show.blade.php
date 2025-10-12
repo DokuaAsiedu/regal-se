@@ -29,6 +29,13 @@
                         </div>
                         <livewire:tables.admin.orders.order-items-table :order_id="$order->id" />
                     </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <flux:heading level="3" size="lg">{{ __('Payments') }}</flux:heading>
+                            <flux:badge size="sm" variant="pill" color="blue">{{ $order->payments->count() }}</flux:badge>
+                        </div>
+                        <livewire:tables.admin.payments.payments-table :payable_id="$order->id" />
+                    </div>
                 </div>
             </div>
             <div class="col-span-1 max-md:order-1 md:col-span-2 flex flex-col gap-2">
