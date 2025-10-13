@@ -49,6 +49,9 @@ final class TransactionsTable extends PowerGridComponent
             ->add('payment_id')
             ->add('amount')
             ->add('currency')
+            ->add('amount_formatted', function (Transaction $model) {
+                return formatCurrency($model->amount, $model->currency);
+            })
             ->add('authorization_url')
             ->add('reference')
             ->add('gateway')
@@ -67,10 +70,7 @@ final class TransactionsTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            Column::make('Currency', 'currency')
-                ->sortable()
-                ->searchable(),
-            Column::make('Amount', 'amount')
+            Column::make('Amount', 'amount_formatted')
                 ->sortable()
                 ->searchable(),
 
