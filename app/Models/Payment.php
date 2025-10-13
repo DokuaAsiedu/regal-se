@@ -49,6 +49,14 @@ class Payment extends Model
             ->first();
     }
 
+    public function hasSiblings(): bool
+    {
+        return static::where('payable_id', $this->payable_id)
+            ->where('payable_type', $this->payable_type)
+            ->where('id', '!=', $this->id)
+            ->exists();
+    }
+
     public function status()
     {
         return $this->belongsTo(Status::class);

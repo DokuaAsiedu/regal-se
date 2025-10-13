@@ -24,7 +24,12 @@
 
         <div class="flex flex-col gap-2">
             <flux:heading level="4" size="lg">{{ __('Paid At:') }}</flux:heading>
-            <flux:text>{{ $payment->paid_at ? formatDate($payment->paid_at, 'F j, Y g:i A') : 'Not paid' }}</flux:text>
+            <div class="flex flex-col gap-2">
+                <flux:text>{{ $payment->paid_at ? formatDate($payment->paid_at, 'F j, Y g:i A') : 'Not paid' }}</flux:text>
+                @if (!$payment->paid_at)
+                    <flux:button variant="filled" class="w-min" wire:click="generateAndSendPaymentLink">{{ __('Generate and send payment link') }}</flux:button>
+                @endif
+            </div>
         </div>
 
         <div class="flex flex-col gap-2">

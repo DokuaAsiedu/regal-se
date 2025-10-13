@@ -4,8 +4,10 @@ namespace App\Services;
 
 use App\Models\Payment;
 use App\Models\Transaction;
+use App\Notifications\SendPaymentLink;
 use App\Repositories\PaymentRepository;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Notification;
 
 class PaymentService
 {
@@ -108,5 +110,15 @@ class PaymentService
     {
         $due_payments = $this->paymentsDueToday();
         $this->transactionService->autoCharge($due_payments);
+    }
+
+    public function generateAndSendPaymentLink(Payment $payment)
+    {
+        $card_only = $payment->hasSiblings();
+        $customer_email = $payment->payable->customer_email;
+        $payment_link = $this->getPaymentLink($payment, $customer_email, $card_only);
+
+        Notification::route('mail', $customer_email)
+            ->notify(new SendPaymentLink($payment, $payment_link));
     }
 }
