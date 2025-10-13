@@ -52,4 +52,9 @@ class Order extends Model
     {
         return $this->morphMany(Payment::class, 'payable');
     }
+
+    public function transactions()
+    {
+        return $this->hasManyThrough(Transaction::class, Payment::class, 'payable_id', 'payment_id', 'id', 'id');
+    }
 }

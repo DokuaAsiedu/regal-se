@@ -53,4 +53,22 @@ class PaystackService
 
         return $response;
     }
+
+    public function chargeAuthorization(array $data)
+    {
+        $charge_authorization_endpoint = config('services.paystack.endpoints.charge_authorization');
+        $secret_key = config('services.paystack.secret_key');
+
+        $response = Http::withToken($secret_key)
+            ->withHeader('Content-Type', 'application/json')
+            ->post($charge_authorization_endpoint, $data)
+            ->throw()
+            ->json();
+
+        if (!$response['status']) {
+            throw new CustomException($response['message']);
+        }
+
+        return $response;
+    }
 }

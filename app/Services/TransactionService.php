@@ -5,10 +5,12 @@ namespace App\Services;
 use App\Enums\PaymentGateways;
 use App\Events\PaymentProcessed;
 use App\Exceptions\CustomException;
+use App\Jobs\AutoChargePayment;
 use App\Models\Payment;
 use App\Repositories\TransactionRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class TransactionService
@@ -155,5 +157,35 @@ class TransactionService
 
         // process payment linked to the transaction
         event(new PaymentProcessed($transaction));
+    }
+
+    public function autoCharge(Collection $payments)
+    {
+        $non_paid = collect();
+        foreach ($payments as $payment) {
+            $last_successful_transaction = $payment->lastSuccessfulTransactionForPayable();
+            if ($last_successful_transaction) {
+                $payload = json_decode($last_successful_transaction->payload, true);
+                $reference = $this->generateReference();
+                $data = [
+                    'email' => $payload['data']['customer']['email'],
+                    'amount' => (int) ($payment->amount * 100),
+                    'authorization_code' => $payload['data']['authorization']['authorization_code'],
+                    'reference' => $reference,
+                ];
+                AutoChargePayment::dispatch($data);
+
+                $transaction_payload = [
+                    'reference' => $reference,
+                    'payment_id' => $payment->id,
+                    'amount' => $payment->amount,
+                    'currency' => $payment->currency,
+                    'gateway' => PaymentGateways::Paystack->value,
+                ];
+                $this->store($transaction_payload);
+            } else {
+                $non_paid->push($payment);
+            }
+        }
     }
 }

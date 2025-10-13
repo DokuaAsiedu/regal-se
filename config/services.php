@@ -41,6 +41,7 @@ return [
         'endpoints' => [
             'initialize_transaction' => 'https://api.paystack.co/transaction/initialize',
             'verify_transaction' => 'https://api.paystack.co/transaction/verify/:reference',
+            'charge_authorization' => 'https://api.paystack.co/transaction/charge_authorization',
         ],
     ],
 

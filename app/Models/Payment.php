@@ -40,6 +40,15 @@ class Payment extends Model
         return $this->hasMany(Transaction::class);
     }
 
+    public function lastSuccessfulTransactionForPayable()
+    {
+        return $this->payable
+            ->transactions()
+            ->whereNotNull('transactions.paid_at')
+            ->latest('transactions.paid_at')
+            ->first();
+    }
+
     public function status()
     {
         return $this->belongsTo(Status::class);

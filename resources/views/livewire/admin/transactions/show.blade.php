@@ -41,11 +41,15 @@
         {{-- Authorization URL --}}
         <div class="flex flex-col gap-2">
             <flux:heading level="4" size="lg">{{ __('Payment Link:') }}</flux:heading>
-            <flux:text>
-                <flux:link href="{{ $transaction->authorization_url }}" target="_blank">
-                    {{ __('View Link') }}
-                </flux:link>
-            </flux:text>
+            @if ($transaction->authorization_url)
+                <flux:text>
+                    <flux:link href="{{ $transaction->authorization_url }}" target="_blank">
+                        {{ __('View Link') }}
+                    </flux:link>
+                </flux:text>
+            @else
+                <flux:text>{{ __('N/A') }}</flux:text>
+            @endif
         </div>
 
         {{-- Payment Relation --}}

@@ -91,4 +91,22 @@ class PaymentService
         $payment->status_id = $transaction->status_id;
         $payment->save();
     }
+
+    public function paymentsDueToday()
+    {
+        $payments = $this->paymentRepository
+            ->allQuery([
+                'due_date' => today(),
+                'paid_at' => null,
+            ])
+            ->get();
+
+        return $payments;
+    }
+
+    public function handleDuePayments()
+    {
+        $due_payments = $this->paymentsDueToday();
+        $this->transactionService->autoCharge($due_payments);
+    }
 }
