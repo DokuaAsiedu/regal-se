@@ -118,5 +118,8 @@
         window.addEventListener("DOMContentLoaded", function() {
             loadCharts()
         })
+        window.addEventListener("livewire:navigated", function() {
+            loadCharts()
+        })
     </script>
 </x-layouts.admin>
