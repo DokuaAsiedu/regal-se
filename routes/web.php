@@ -27,30 +27,29 @@ Route::group([], function () {
     Route::get('settings/profile', [ClientUserController::class, 'editProfile'])->name('client.settings.profile');
     Route::get('settings/password', [ClientUserController::class, 'changePassword'])->name('client.settings.password');
     Route::get('settings/appearance', [ClientUserController::class, 'changeAppearance'])->name('client.settings.appearance');
-});
 
-Route::view('dashboard', 'admin.dashboard')
-    ->middleware(['auth', 'verified', 'admin'])
-    ->name('admin.dashboard')
-    ->prefix('admin');
 
-Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-    Route::resource('orders', AdminOrderController::class);
-    Route::resource('products', ProductController::class);
-    Route::resource('categories', CategoryController::class);
-    Route::resource('users', UserController::class);
-    Route::resource('kyc', KYCController::class);
-    Route::get('store-settings', [StoreSettingsController::class, 'edit'])->name('store-settings.edit');
-    Route::resource('payments', AdminPaymentController::class);
-    Route::resource('transactions', TransactionsController::class);
-    Route::resource('companies', CompaniesController::class);
-    Route::get('company-staff', [CompanyStaffController::class, 'index'])
-        ->name('company-staff.index');
-    Route::redirect('settings', 'settings/profile');
+Route::middleware(['auth', 'admin', 'verified'])
+    ->prefix('admin')
+    ->group(function () {
+        Route::view('dashboard', 'admin.dashboard')->name('admin.dashboard');
+        Route::resource('orders', AdminOrderController::class);
+        Route::resource('products', ProductController::class);
+        Route::resource('categories', CategoryController::class);
+        Route::resource('users', UserController::class);
+        Route::resource('kyc', KYCController::class);
+        Route::get('store-settings', [StoreSettingsController::class, 'edit'])->name('store-settings.edit');
+        Route::resource('payments', AdminPaymentController::class);
+        Route::resource('transactions', TransactionsController::class);
+        Route::resource('companies', CompaniesController::class);
+        Route::get('company-staff', [CompanyStaffController::class, 'index'])
+            ->name('company-staff.index');
+        Route::redirect('settings', 'settings/profile');
 
-    Route::get('settings/profile', [UserController::class, 'editProfile'])->name('settings.profile');
-    Route::get('settings/password', [UserController::class, 'changePassword'])->name('settings.password');
-    Route::get('settings/appearance', [UserController::class, 'changeAppearance'])->name('settings.appearance');
-});
+        Route::get('settings/profile', [UserController::class, 'editProfile'])->name('settings.profile');
+        Route::get('settings/password', [UserController::class, 'changePassword'])->name('settings.password');
+        Route::get('settings/appearance', [UserController::class, 'changeAppearance'])->name('settings.appearance');
+    }
+);
 
 require __DIR__.'/auth.php';
