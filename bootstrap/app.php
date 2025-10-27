@@ -1,9 +1,11 @@
 <?php
 
+use App\Exceptions\Handler;
 use App\Http\Middleware\Admin;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -18,5 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->render(function (Throwable $exception, Request $request) {
+            return app(Handler::class)->handleError($exception, $request);
+        });
     })->create();
