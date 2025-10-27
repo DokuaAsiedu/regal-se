@@ -1,0 +1,39 @@
+{
+    // Visit https://aka.ms/tsconfig to read more about this file
+    "compilerOptions": {
+        "module": "esnext",
+        "target": "esnext",
+        "moduleResolution": "Node",
+        "types": [],
+        "sourceMap": true,
+        "declaration": true,
+        "declarationMap": true,
+        "noUncheckedIndexedAccess": true,
+        "exactOptionalPropertyTypes": true,
+        "strict": true,
+        "jsx": "react-jsx",
+        "isolatedModules": true,
+        "esModuleInterop": true,
+        "noUncheckedSideEffectImports": true,
+        "allowSyntheticDefaultImports": true,
+        "forceConsistentCasingInFileNames": true,
+        "moduleDetection": "force",
+        "skipLibCheck": true,
+        "noEmit": true,
+        "resolveJsonModule": true,
+        "paths": {
+            "@/*": [
+                "./resources/js/*",
+            ],
+        },
+    },
+    "include": [
+        "resources/js/**/*.ts",
+        "resources/js/**/*.js",
+        "resources/js/**/*.tsx",
+        "index.d.ts",
+    ],
+    "exclude": [
+        "node_modules",
+    ],
+}
