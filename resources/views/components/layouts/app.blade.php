@@ -7,5 +7,7 @@
         {{ $slot }}
         @fluxScripts
         @livewire('wire-elements-modal')
+        @vitereactrefresh
+        @vite(['resources/js/create-product.tsx'])
     </body>
 </html>

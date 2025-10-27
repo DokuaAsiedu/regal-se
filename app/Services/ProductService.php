@@ -6,6 +6,7 @@ use App\Exceptions\CustomException;
 use App\Models\Product;
 use App\Models\Status;
 use App\Repositories\ProductRepository;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ProductService
 {
@@ -41,9 +42,16 @@ class ProductService
 
         $product = $this->productRepository->create($input);
 
-        if (isset($input['categories'])) {
-            $category_ids = array_map((fn ($item) => $item['id']), $input['categories']);
-            $product->categories()->attach($category_ids);
+        if (isset($input['product_categories'])) {
+            // $category_ids = array_map((fn ($item) => $item['id']), $input['product_categories']);
+            $product->categories()->attach($input['product_categories']);
+        }
+
+        if (isset($input['product_images'])) {
+            foreach ($input['product_images'] as $image) {
+                $product->addMedia($image)
+                    ->toMediaCollection('product_images');
+            }
         }
 
         return $product;
@@ -61,9 +69,20 @@ class ProductService
 
         $product = $this->productRepository->update($input, $id);
 
-        if (isset($input['categories'])) {
-            $category_ids = array_map((fn ($item) => $item['id']), $input['categories']);
+        if (isset($input['product_categories'])) {
+            $category_ids = array_filter($input['product_categories'], fn ($item) => $item);
             $product->categories()->sync($category_ids);
+        }
+
+        if (isset($input['product_images'])) {
+            foreach ($input['product_images'] as $image) {
+                $product->addMedia($image)
+                    ->toMediaCollection('product_images');
+            }
+        }
+
+        if (isset($input['deleted_image_ids'])) {
+            Media::destroy($input['deleted_image_ids']);
         }
 
         return $product;
