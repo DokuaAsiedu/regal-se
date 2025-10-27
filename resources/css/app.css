@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @import '../../vendor/livewire/flux/dist/flux.css';
 @import 'intl-tel-input/build/css/intlTelInput.css';
+@import "../../vendor/php-flasher/flasher/Resources/dist/flasher.min.css";
 @import './custom.css';
 
 @source '../views';
@@ -89,8 +90,16 @@ select:focus[data-flux-control] {
     @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
 }
 
-button {
-    @apply cursor-pointer;
+.button {
+    @apply p-2 border-1 rounded-lg cursor-pointer;
+}
+
+.button:hover {
+    @apply hover:bg-gray-50;
+}
+
+input, select {
+    @apply p-2 border-1 rounded-lg;
 }
 
 /* \[:where(&)\]:size-4 {
