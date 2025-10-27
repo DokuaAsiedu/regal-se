@@ -17,6 +17,7 @@
         "php-flasher/flasher-laravel": "^2.1",
         "power-components/livewire-powergrid": "^6.4",
         "spatie/laravel-activitylog": "^4.10",
+        "spatie/laravel-medialibrary": "^11.15",
         "wire-elements/modal": "^3.0"
     },
     "require-dev": {
